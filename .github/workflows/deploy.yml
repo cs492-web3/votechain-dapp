@@ -6,15 +6,15 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    default:
+      run:
+      working-directory: "./frontend"
     steps:
       - uses: actions/checkout@main
       - name: Set up Node.js
         uses: actions/setup-node@main
         with:
           node-version: 16.x
-      - name: "cd frontend"
-        run: cd frontend
-
       - name: Cache node_modules
         uses: actions/cache@v1
         with:
