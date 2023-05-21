@@ -1,0 +1,35 @@
+name: Deploy Project
+on:
+  push:
+    branches:
+      - main
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - name: Set up Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: 16.x
+      - name: "cd frontend"
+        run: cd frontend
+
+      - name: Cache node_modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{runner.OS}}-build-${{hashFiles('**/yarn.lock')}}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ runner.OS }}-
+      - name: Install dependencies
+        run: yarn install --prod --pure-lockfile
+
+      - name: Build
+        run: yarn run build
+        env:
+          NODE_ENV: production
+      - name: Deploy
+        run: yarn run deploy
+        env:
+          NODE_ENV: production
