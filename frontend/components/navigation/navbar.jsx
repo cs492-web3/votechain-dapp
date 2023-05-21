@@ -1,12 +1,27 @@
+import * as React from "react";
+import { AppBar, Box, Typography } from "@mui/material";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import styles from "../../styles/Navbar.module.css";
+
 export default function Navbar() {
-	return (
-		<nav className={styles.navbar}>
-			<a href="https://alchemy.com/?a=create-web3-dapp" target={"_blank"}>
-				<img className={styles.alchemy_logo} src="/cw3d-logo.png"></img>
-			</a>
-			<ConnectButton></ConnectButton>
-		</nav>
-	);
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar
+        position="static"
+        color="transparent"
+        sx={{
+          padding: 2,
+		  paddingLeft:4,
+		  paddingRight:4,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6" component="div" sx={{ color: "white" }}>
+          VoteChain
+        </Typography>
+        <ConnectButton></ConnectButton>
+      </AppBar>
+    </Box>
+  );
 }
