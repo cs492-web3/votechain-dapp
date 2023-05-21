@@ -1,24 +1,30 @@
 {
-	"name": "votechain-dapp",
-	"version": "0.1.0",
-	"private": true,
-	"scripts": {
-		"dev": "next dev",
-		"build": "next build",
-		"start": "next start",
-		"lint": "next lint",
-		"marketplace": "npx create-web3-dapp marketplace"
-	},
-	"dependencies": {
-		"next": "13.1.2",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
-		"alchemy-sdk": "^2.6.2",
-		"@rainbow-me/rainbowkit": "^0.12.4",
-		"wagmi": "^0.12.6"
-	},
-	"devDependencies": {
-		"eslint": "8.36.0",
-		"eslint-config-next": "13.2.4"
-	}
+  "name": "votechain-dapp",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://cs492-web3.github.io/votechain-dapp",
+  "scripts": {
+    "dev": "next dev",
+    "start": "next start",
+    "build": "next build && next export",
+    "test": "next test",
+    "export": "next export",
+    "predeploy": "npm run build",
+    "deploy": "touch out/.nojekyll && gh-pages -d out --dotfiles",
+    "lint": "next lint",
+    "marketplace": "npx create-web3-dapp marketplace"
+  },
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^0.12.4",
+    "alchemy-sdk": "^2.6.2",
+    "gh-pages": "^5.0.0",
+    "next": "13.1.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "wagmi": "^0.12.6"
+  },
+  "devDependencies": {
+    "eslint": "8.36.0",
+    "eslint-config-next": "13.2.4"
+  }
 }
