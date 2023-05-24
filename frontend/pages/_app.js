@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 const { chains, provider } = configureChains(
   [
     mainnet,
-    // goerli,
+    goerli,
     // polygon,
     // polygonMumbai,
     // optimism,
