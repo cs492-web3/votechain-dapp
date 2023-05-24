@@ -3,23 +3,17 @@ import * as S from "./index.styles";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Admin() {
   const router = useRouter();
   const account = useAccount({
     onConnect({ address, connector, isReconnected }) {
       if (!isReconnected) router.reload();
     },
   });
-  if (account.isConnected) {
-    router.replace("/all-votes", undefined, { shallow: true });
-  }
-  
+
   return (
     <S.RootStyle>
-      <S.Title>Welcome to Nupjuk Votechain</S.Title>
-      <S.Title>Let's Get Started</S.Title>
-      <ConnectButton></ConnectButton>
-      <S.Title />
+      <S.Title>Add Candidate</S.Title>
     </S.RootStyle>
   );
 }
