@@ -10,4 +10,5 @@ export const RootStyle = styled("div")(() => ({
 
 export const CardContainer = styled("div")(() => ({
   display: 'flex',
+  flexDirection: 'column'
 }));

@@ -13,22 +13,6 @@ const AllVotes = () => {
 
   const [result, setResult] = useState([]);
 
-  useEffect(() => {
-    async function fetchCandidates() {
-      // const candidates = await getCandidates();
-      // const totalNum = await getTotalCandidatesNum();
-      // console.log(candidates);
-      // console.log(totalNum);
-      // setCandidates(candidates);
-      // setTotalCandidates(totalNum);
-
-      const result = await getVoteResultFor(4);
-      setResult(result);
-    }
-    fetchCandidates();
-  }, []);
-
-  console.log(result);
   return (
     <S.RootStyle>
       <S.CardContainer>

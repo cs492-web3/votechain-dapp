@@ -2,38 +2,93 @@ import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import contractABI from "./contract-abi.json";
 
 const alchemyKey = process.env.REACT_APP_ALCHEMY_KEY;
-// const alchemyKey =
-//   "wss://eth-goerli.g.alchemy.com/v2/refaFG0a94Wv8ud9tUiSHlqS6I1lUknQ";
 
 const web3 = createAlchemyWeb3(alchemyKey);
 
-const contractAddress = "0xA0869fa4bCf38a80cf33c65212874Cf0132ff32d";
+// 컨트랙트의 주인: 주희
+// const contractAddress = "0x749d7E5a6Fb66C7983D6056b16df8CB770d3B785";
+
+//컨트랙트의 주인: 세아 - 카이스트 마스코트 투표
+const contractAddress = "0x83082AecC750949bB2686AfCAfe4E5A708a56Fe9";
 
 export const ElectionContract = new web3.eth.Contract(
   contractABI,
   contractAddress
 );
 
-console.log(ElectionContract);
+// ------ 투표 status 바꿔주는 함수 -------
 
-export const getCandidates = async () => {
-  const candidates = await ElectionContract.methods.candidates;
-  return candidates;
-};
-
-export const getTotalCandidatesNum = async () => {
-  const totalNum = await ElectionContract.methods.totalCandidateNum.call();
-  return totalNum;
-};
-
-export const getVoteResultFor = async (candidateId) => {
-  const result = await ElectionContract.methods
-    .voteResultFor(candidateId)
-    .call();
+export const endRegisterCandSession = async (address) => {
+  const endABI = ElectionContract.methods.endRegisterCandSession().encodeABI();
+  const result = await makeTransaction(address, endABI);
   return result;
 };
 
-export const sendVoteTo = async (address, candidateId) => {
+export const startVoteSession = async (address) => {
+  const startABI = ElectionContract.methods.startVoteSession().encodeABI();
+  const result = await makeTransaction(address, startABI);
+  return result;
+};
+
+export const endVoteSession = async (address) => {
+  const endABI = ElectionContract.methods.endVoteSession().encodeABI();
+  const result = await makeTransaction(address, endABI);
+  return result;
+};
+
+// ------ 투표 시스템을 위한 함수 ------
+
+export const registerCandidate = async (address, candidateName) => {
+  const registerABI = ElectionContract.methods
+    .registerCandidate(candidateName)
+    .encodeABI();
+  const result = await makeTransaction(address, registerABI);
+  return result;
+};
+
+export const vote = async (address, candidateId) => {
+  const voteABI = ElectionContract.methods.vote(candidateId).encodeABI();
+  const result = await makeTransaction(address, voteABI);
+  return result;
+};
+
+export const getTotalCandidateNum = async () => {
+  const totalNum = await ElectionContract.methods.getTotalCandidateNum().call();
+  return totalNum;
+};
+
+export const getCandidateName = async (address, candidateId) => {
+  const candidateName = await ElectionContract.methods
+    .getCandidateName(candidateId)
+    .call({ from: address });
+  return candidateName;
+};
+
+export const getCandidateVoteCount = async (address, candidateId) => {
+  const totalCount = await ElectionContract.methods
+    .getCandidateVoteCount(candidateId)
+    .call({ from: address });
+  return totalCount;
+};
+
+export const getTotalVoteCount = async (address) => {
+  const totalVoteCount = await ElectionContract.methods
+    .getTotalVoteCount()
+    .call({ from: address });
+  return totalVoteCount;
+};
+
+export const getIsAdmin = async (address) => {
+  const isAdmin = await ElectionContract.methods.getIsAdmin(address).call();
+  return isAdmin;
+};
+
+export const getElectionStatus = async () => {
+  const status = await ElectionContract.methods.getElectionStatus().call();
+  return status;
+};
+
+async function makeTransaction(address, methodABI) {
   //input error handling
   if (address == "") {
     return {
@@ -42,18 +97,11 @@ export const sendVoteTo = async (address, candidateId) => {
     };
   }
 
-  if (candidateId == null) {
-    return {
-      status: "fail",
-      message: "❌ choose candidate",
-    };
-  }
-
   //set up transaction parameters
   const transactionParameters = {
     to: contractAddress, // Required except during contract publications.
     from: address, // must match user's active address.
-    data: ElectionContract.methods.vote(candidateId).encodeABI(),
+    data: methodABI,
   };
 
   //sign the transaction
@@ -72,6 +120,4 @@ export const sendVoteTo = async (address, candidateId) => {
       message: "😥 " + error.message,
     };
   }
-
-  return result;
-};
+}
