@@ -1,34 +1,58 @@
 import React, { useState } from "react";
-import { Card, CardMedia, CardContent, Typography, CardActionArea} from '@mui/material';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActionArea,
+  Paper,
+} from "@mui/material";
 import { useRouter } from "next/router";
-import voteComplete from '../assets/voteComplete.png'
+import voteComplete from "../assets/voteComplete.png";
 
 const VoteCard = (data) => {
   const router = useRouter();
 
-  const onClickVote = ()=>{
+  const onClickVote = () => {
     // id
-    const id = 1
-    router.push("/vote/"+id)
-  }
-
-  // 투표 완료 한 경우 
+    const id = 1;
+    router.push("/vote/" + id);
+  };
 
   return (
     <div>
-      <Card sx={{ minWidth: 275, minHeight:275, marginRight: 10 }}>
+      <Paper
+        sx={{
+          minWidth: 275,
+          minHeight: 275,
+          margin: 5,
+          borderRadius: 20,
+          display: "flex",
+          alignContent: "center",
+          justifyContent: "center",
+        }}
+      >
         <CardActionArea onClick={onClickVote}>
-          <CardMedia component="img"  sx={{ height: '100', width:'100' }} image={require("../assets/voteComplete.png")}/>
-          <CardContent sx={{ minWidth: 275, minHeight: 275}}>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            KAIST 전산학부 과대표 투표 참여하기
-          </Typography>
-        </CardContent>
+          <CardContent
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              투표 참여하기
+            </Typography>
+          </CardContent>
         </CardActionArea>
-      </Card>
+      </Paper>
     </div>
   );
 };
-
 
 export default VoteCard;

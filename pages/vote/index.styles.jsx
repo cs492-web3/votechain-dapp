@@ -20,12 +20,23 @@ export const RootStyle = styled("div")(() => ({
 }));
 
 export const CandidateContainer = styled("div")(() => ({
-  width: "100%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  flexDirection: "space-between",
-  flexWrap: 'wrap'
+  flexDirection: "column",
+  flexWrap: "wrap",
+  width: "70%",
+}));
+
+export const Candidate = styled("div")((props) => ({
+  width: "100%",
+  color: "white",
+  border: "1px solid ",
+  margin: 10,
+  textAlign: "center",
+  padding: 30,
+  borderRadius: 30,
+  backgroundColor: props.selected ? "rgba(25, 118, 210, 0.3)" :"rgba(25, 118, 210, 0)",
 }));
 
 export const VoteButton = styled(Button)(() => ({
