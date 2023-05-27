@@ -36,7 +36,7 @@ export const Candidate = styled("div")((props) => ({
   textAlign: "center",
   padding: 30,
   borderRadius: 30,
-  backgroundColor: props.selected ? "rgba(25, 118, 210, 0.3)" :"rgba(25, 118, 210, 0)",
+  backgroundColor: props.selected ? "rgba(255, 255, 255, 0.2)" :"rgba(25, 118, 210, 0)",
 }));
 
 export const VoteButton = styled(Button)(() => ({

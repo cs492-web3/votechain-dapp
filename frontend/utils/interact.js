@@ -6,10 +6,10 @@ const alchemyKey = process.env.REACT_APP_ALCHEMY_KEY;
 const web3 = createAlchemyWeb3(alchemyKey);
 
 // 컨트랙트의 주인: 주희
-// const contractAddress = "0x749d7E5a6Fb66C7983D6056b16df8CB770d3B785";
+//const contractAddress = "0x8a8Cdf5a930434dCD4EFf481978cd676aEDAAB69";
 
-//컨트랙트의 주인: 세아 - 카이스트 마스코트 투표
-const contractAddress = "0x83082AecC750949bB2686AfCAfe4E5A708a56Fe9";
+//컨트랙트의 주인: 세아
+const contractAddress = "0x03dEbe046471Cb09662D26cE5E29cbCe2d32645e";
 
 export const ElectionContract = new web3.eth.Contract(
   contractABI,
@@ -52,6 +52,14 @@ export const vote = async (address, candidateId) => {
   return result;
 };
 
+export const voteAndGetNFT = async (address, candidateId) => {
+  const voteABI = ElectionContract.methods
+    .voteAndGetNFT(candidateId)
+    .encodeABI();
+  const result = await makeTransaction(address, voteABI);
+  return result;
+};
+
 export const getTotalCandidateNum = async () => {
   const totalNum = await ElectionContract.methods.getTotalCandidateNum().call();
   return totalNum;
@@ -81,6 +89,18 @@ export const getTotalVoteCount = async (address) => {
 export const getIsAdmin = async (address) => {
   const isAdmin = await ElectionContract.methods.getIsAdmin(address).call();
   return isAdmin;
+};
+
+export const getTokenId = async (address) => {
+  const tokenId = await ElectionContract.methods.getTokenId(address).call();
+  console.log(tokenId);
+  return tokenId;
+};
+
+export const getNFTTokenCA = async () => {
+  const NFTTokenCA = await ElectionContract.methods.getNFTTokenCA().call();
+  console.log(NFTTokenCA);
+  return NFTTokenCA;
 };
 
 export const getElectionStatus = async () => {

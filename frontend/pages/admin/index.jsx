@@ -24,10 +24,12 @@ export default function Admin() {
     async function checkIsAdmin() {
       if (address != "") {
         const admin = await getIsAdmin(address);
+        console.log(admin);
         setIsAdmin(admin);
       }
     }
     checkIsAdmin();
+    console.log("address: ", address);
   }, [address]);
 
   const handleModalClose = () => {
