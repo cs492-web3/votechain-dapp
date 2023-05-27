@@ -4,13 +4,17 @@ import { useAccount } from "wagmi";
 import {
   getCandidateName,
   getTotalCandidateNum,
-  vote,
+  voteAndGetNFT,
+  getTokenId,
+  getNFTTokenCA,
 } from "../../utils/interact";
 
 import TransactionDialog from "../../components/TransactionDialog";
 
 const Vote = () => {
   const [address, setAddress] = useState("");
+  const [tokenId, setTokenId] = useState("");
+  const [NFTTokenCA, setNFTTokenCA] = useState("");
   const account = useAccount({
     onConnect({ address, connector, isReconnected }) {
       if (!isReconnected) router.reload();
@@ -32,6 +36,21 @@ const Vote = () => {
 
   const [totalCandidateNum, setTotalCandidateNum] = useState(0);
   const [candidateList, setCandidateList] = useState([]);
+
+  useEffect(() => {
+    async function getNFT() {
+      const newTokenId = await getTokenId(address);
+      const newNFTTokenCA = await getNFTTokenCA();
+      setTokenId(newTokenId);
+      setNFTTokenCA(newNFTTokenCA);
+    }
+    console.log(address);
+    if (address != "") {
+      getNFT();
+      console.log(NFTTokenCA);
+      console.log(tokenId);
+    }
+  }, [address]);
 
   useEffect(() => {
     async function getTotalCandidateNumber() {
@@ -64,7 +83,7 @@ const Vote = () => {
       alert("후보자를 선택해주세요");
     } else {
       setModalOpen(true);
-      const result = await vote(address, selectedId);
+      const result = await voteAndGetNFT(address, selectedId);
       setTransactionResult(result);
     }
   };
