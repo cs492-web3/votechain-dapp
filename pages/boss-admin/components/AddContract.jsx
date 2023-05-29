@@ -56,7 +56,7 @@ const AddContract = () => {
             style: { color: "grey" },
           }}
           onChange={(event) => {
-            setContractAddress(event.target.value);
+            setContractAddress(event.target.value.trim());
           }}
           inputProps={{ style: { color: "white" } }}
         />

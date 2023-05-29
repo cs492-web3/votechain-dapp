@@ -9,11 +9,23 @@ export const Contract = styled(Button)(() => ({
   padding: 20,
   margin: 10,
   borderRadius: 20,
+  height: "120px",
+}));
+
+export const VotedContract = styled(Button)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  border: "1px solid grey",
+  color: "grey",
+  padding: 20,
+  margin: 10,
+  borderRadius: 20,
+  height: "120px",
 }));
 
 export const Info = styled(Typography)`
   color: white;
-  font-size: 15px;
+  font-size: 18px;
   margin-top: 10px;
   margin-bottom: 10px;
 `;

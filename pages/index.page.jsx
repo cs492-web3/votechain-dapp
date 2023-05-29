@@ -11,7 +11,7 @@ export default function Home() {
     },
   });
   if (account.isConnected) {
-    router.replace("/all-votes");
+    router.replace({ pathname: "/votechain-dapp/all-votes" });
   }
 
   return (

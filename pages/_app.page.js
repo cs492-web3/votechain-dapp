@@ -24,6 +24,9 @@ import { useRouter } from "next/router";
 import { walletAddressState } from "./atom";
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { getDefaultProvider } from "ethers";
+import { NftProvider, useNft } from "use-nft";
+import Home from "./index.page";
 const { chains, provider } = configureChains(
   [
     mainnet,
@@ -54,37 +57,48 @@ const wagmiClient = createClient({
 
 export { WagmiConfig, RainbowKitProvider };
 
-const HandleAddress = ({ Component, pageProps }) => {
+const AdminRoute = ({ children }) => {
   const router = useRouter();
   const [walletAddress, setWalletAddress] = useRecoilState(walletAddressState);
   const account = useAccount({
-    onConnect({ address, connector, isReconnected }) {
+    onConnect({ address, connector, isReconnected, isDisconnected }) {
       if (!isReconnected) router.reload();
       setWalletAddress(address);
     },
+    onDisconnect() {
+      router.replace({ pathname: '/votechain-dapp/'});
+    },
   });
-  return (
-    <MainLayout>
-      <Component {...pageProps} />
-    </MainLayout>
-  );
+
+  return <>{children}</>;
 };
 
 function MyApp({ Component, pageProps }) {
   const queryClient = new QueryClient();
+  // We are using the "ethers" fetcher here.
+  const ethersConfig = {
+    provider: getDefaultProvider("homestead"),
+  };
+
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <RecoilNexus />
-        <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider
-            modalSize="compact"
-            initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
-            chains={chains}
-          >
-            <HandleAddress Component={Component} pageProps={pageProps} />
-          </RainbowKitProvider>
-        </WagmiConfig>
+        <NftProvider fetcher={["ethers", ethersConfig]}>
+          <RecoilNexus />
+          <WagmiConfig client={wagmiClient}>
+            <RainbowKitProvider
+              modalSize="compact"
+              initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
+              chains={chains}
+            >
+              <MainLayout>
+                <AdminRoute>
+                  <Component {...pageProps} />
+                </AdminRoute>
+              </MainLayout>
+            </RainbowKitProvider>
+          </WagmiConfig>
+        </NftProvider>
       </QueryClientProvider>
     </RecoilRoot>
   );
