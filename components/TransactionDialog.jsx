@@ -5,12 +5,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-
+import NFTDialog from "./NFTDialog";
 export default function TransactionDialog({
   open,
   result,
   handleClose,
   onClickClose,
+  NFTCA,
+  tokenId,
 }) {
   return (
     <div>
@@ -36,7 +38,10 @@ export default function TransactionDialog({
               트랜잭션 진행 중
             </DialogContentText>
           )}
+
+          {NFTCA && tokenId && <NFTDialog NFTCA={NFTCA} tokenId={tokenId} />}
         </DialogContent>
+
         <DialogActions>
           <Button onClick={onClickClose}>닫기</Button>
         </DialogActions>

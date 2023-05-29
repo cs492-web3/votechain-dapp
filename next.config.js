@@ -3,8 +3,8 @@
 const Dotenv = require("dotenv-webpack");
 const withImages = require("next-images");
 const hompage = "https://cs492-web3.github.io/votechain-dapp/";
-module.exports = withImages();
 
+module.exports = withImages();
 const nextConfig = {
   reactStrictMode: false,
   webpack: (config) => {
@@ -14,6 +14,7 @@ const nextConfig = {
   pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
   assetPrefix: process.env.NODE_ENV === "production" ? hompage : "",
   env: {},
+  basePath: process.env.NODE_ENV === "production" ? "/votechain-dapp": "",
 };
 
 module.exports = nextConfig;

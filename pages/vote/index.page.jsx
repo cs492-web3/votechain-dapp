@@ -150,12 +150,13 @@ const Vote = () => {
         })}
       </S.CandidateContainer>
       <S.VoteButton onClick={voteHandler}>투표하기</S.VoteButton>
-      {/* <NFTDialog NFTCA={NFTCA} tokenId={tokenId} /> */}
       <TransactionDialog
         open={modalOpen}
         result={transactionResult}
         handleClose={handleModalClose}
         onClickClose={onClickClose}
+        NFTCA={NFTCA}
+        tokenId={tokenId}
       />
     </S.RootStyle>
   );

@@ -21,11 +21,11 @@ export default function Navbar() {
       >
         <Button
           sx={{ color: "white", fontSize: 20 }}
-          onClick={() => router.push({ pathname: "/votechain-dapp/" })}
+          onClick={() => router.push({ pathname: "/" })}
         >
           VoteChain
         </Button>
-        <ConnectButton></ConnectButton>
+        <ConnectButton ></ConnectButton>
       </AppBar>
     </Box>
   );

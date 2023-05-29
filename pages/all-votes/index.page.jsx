@@ -7,8 +7,8 @@ import {
   getElectionStatus,
   getHasVoted,
 } from "../api/voteAPI";
+import bannerPNG from "../../public/banner.png";
 
-import banner from "../../assets/banner.png";
 const AllVotes = () => {
   const [allContractList, setAllContractList] = useState([]);
   const [contractInfoList, setContractInfoList] = useState([]);
@@ -60,7 +60,7 @@ const AllVotes = () => {
           height: "100px",
           backgroundColor: "white",
         }}
-        src={banner}
+        src={bannerPNG}
       />
     </S.RootStyle>
   );
