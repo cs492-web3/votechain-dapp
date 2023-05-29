@@ -1,8 +1,25 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const ResultChart = ({ voteData, voteLabels }) => {
-  ChartJS.register(ArcElement, Tooltip, Legend);
+  const title = "dhakjshdk";
   const data = {
     labels: voteLabels,
     datasets: [
@@ -19,12 +36,23 @@ const ResultChart = ({ voteData, voteLabels }) => {
     ],
   };
 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: title,
+      },
+    },
+  };
   return (
-    <div style={{width: '70%'}}>
-    <Doughnut data={data} />
+    <div style={{ width: "100%" }}>
+      <Bar options={options} data={data} />
     </div>
-  )
-
+  );
 };
 
 export default ResultChart;

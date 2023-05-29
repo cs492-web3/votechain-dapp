@@ -51,7 +51,7 @@ const AddCandidates = () => {
         const status = await getElectionStatus(ABI, router.query["address"]);
         if (status == 1) {
           router.push({
-            pathname: "/votechain-dapp/vote",
+            pathname: "/vote",
             query: {
               address: router.query["address"],
               name: router.query["name"],

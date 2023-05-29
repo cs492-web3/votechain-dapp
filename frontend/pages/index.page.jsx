@@ -11,7 +11,7 @@ export default function Home() {
     },
   });
   if (account.isConnected) {
-    router.replace({ pathname: "/votechain-dapp/all-votes" });
+    router.replace({ pathname: "/all-votes", shallow: true });
   }
 
   return (
@@ -19,7 +19,6 @@ export default function Home() {
       <S.Title>Welcome to Nupjuk Votechain</S.Title>
       <S.Title>Let's Get Started</S.Title>
       <ConnectButton></ConnectButton>
-      <S.Title />
     </S.RootStyle>
   );
 }

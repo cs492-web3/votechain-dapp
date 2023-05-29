@@ -66,7 +66,7 @@ const AdminRoute = ({ children }) => {
       setWalletAddress(address);
     },
     onDisconnect() {
-      router.replace({ pathname: '/votechain-dapp/'});
+      router.replace({ pathname: '/'});
     },
   });
 
