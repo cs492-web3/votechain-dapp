@@ -12,16 +12,15 @@ import { useRecoilValue } from "recoil";
 import { walletAddressState } from "../atom";
 import TransactionDialog from "../../components/TransactionDialog";
 
-const Vote = () => {
-  const [address, setAddress] = useState("");
-  const [tokenId, setTokenId] = useState("");
-  const [NFTTokenCA, setNFTTokenCA] = useState("");
-  const account = useAccount({
-    onConnect({ address, connector, isReconnected }) {
-      if (!isReconnected) router.reload();
-      else setAddress(address);
-    },
-  });
+const AddCandidates = () => {
+  const [totalCandidateNum, setTotalCandidateNum] = useState(0);
+  const [candidateList, setCandidateList] = useState([]);
+
+  const [transactionResult, setTransactionResult] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [candidateName, setCandidateName] = useState("");
+
+  const address = useRecoilValue(walletAddressState);
 
   const [transactionResult, setTransactionResult] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
