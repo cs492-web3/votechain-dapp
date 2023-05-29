@@ -5,14 +5,4 @@ const walletAddressState = atom({
   default: "",
 });
 
-const contractAddressState = atom({
-  key: "contractAddress",
-  default: "",
-});
-
-const contractABIState = atom({
-  key: "contractABI",
-  default: "",
-});
-
-export { walletAddressState, contractAddressState, contractABIState };
+export { walletAddressState };

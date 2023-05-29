@@ -6,9 +6,6 @@ import { walletAddressState } from "../../atom";
 import TransactionDialog from "../../../components/TransactionDialog";
 
 const ContractInfo = ({ data }) => {
-  const [contractName, setContractName] = useState("");
-  const [contractAddress, setContractAddress] = useState("");
-
   const [transactionResult, setTransactionResult] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -17,11 +14,13 @@ const ContractInfo = ({ data }) => {
   const handleModalClose = () => {
     if (Object.entries(setTransactionResult).length != 0) {
       setModalOpen(false);
+      router.reload();
     }
   };
 
   const onClickClose = () => {
     setModalOpen(false);
+    router.reload();
   };
 
   const activatetHandler = async () => {
@@ -42,8 +41,8 @@ const ContractInfo = ({ data }) => {
       <S.Contract>
         <S.Info>{`Contract ID : ${data.id}`}</S.Info>
         <S.Info>{`Contract Name : ${data.name}`}</S.Info>
-        <S.Info>{`Contract Address : ${data.contactAddress}`}</S.Info>
-        <S.Info>{`Is Contract Activated : ${data.isDeleted}`}</S.Info>
+        <S.Info>{`Contract Address : ${data.contractAddress}`}</S.Info>
+        <S.Info>{`Contract Inactivated : ${data.isDeleted}`}</S.Info>
         <S.RegisterButton onClick={activatetHandler}>
           {data.isDeleted ? "Activate" : "Inactivate"} Contract
         </S.RegisterButton>

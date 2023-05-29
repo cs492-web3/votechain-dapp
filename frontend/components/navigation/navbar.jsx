@@ -1,8 +1,10 @@
 import * as React from "react";
-import { AppBar, Box, Typography } from "@mui/material";
+import { AppBar, Box, Button, Typography } from "@mui/material";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useRouter } from "next/router";
 
 export default function Navbar() {
+  const router = useRouter();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -10,16 +12,19 @@ export default function Navbar() {
         color="transparent"
         sx={{
           padding: 2,
-		  paddingLeft:4,
-		  paddingRight:4,
+          paddingLeft: 4,
+          paddingRight: 4,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
         }}
       >
-        <Typography variant="h6" component="div" sx={{ color: "white" }}>
+        <Button
+          sx={{ color: "white", fontSize: 20 }}
+          onClick={() => router.push({ pathname: "/votechain-dapp/" })}
+        >
           VoteChain
-        </Typography>
+        </Button>
         <ConnectButton></ConnectButton>
       </AppBar>
     </Box>

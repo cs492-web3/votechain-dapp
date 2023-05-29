@@ -2,8 +2,9 @@ import styled from "@emotion/styled";
 import { css, Typography } from "@mui/material";
 
 export const RootStyle = styled("div")(() => ({
-  marginLeft: "4rem",
-  marginRight: "4rem",
+  marginLeft: "10px",
+  marginRight: "10px",
+  justifyContent: "center",
   height: "100%",
 }));
 

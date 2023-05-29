@@ -7,14 +7,16 @@ import {
   getTotalCandidateNum,
   getCandidateName,
   getCandidateVoteCount,
-  endRegisterCandSession,
   startVoteSession,
   endVoteSession,
   getTotalVoteCount,
-} from "../../../utils/interact";
+  restartVoteSession,
+} from "../../api/voteAPI";
 import TransactionDialog from "../../../components/TransactionDialog";
+import { useRouter } from "next/router";
 
-const CurrVoteInfo = ({ address }) => {
+const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
+  const router = useRouter();
   const [currVoteStatus, setCurrVoteStatus] = useState(null);
   const [candidateList, setCandidateList] = useState([]);
   const [totalCandidateNum, setTotalCandidateNum] = useState();
@@ -26,28 +28,33 @@ const CurrVoteInfo = ({ address }) => {
   const handleModalClose = () => {
     if (Object.entries(setTransactionResult).length != 0) {
       setModalOpen(false);
+      router.reload();
     }
   };
   const onClickClose = () => {
     setModalOpen(false);
+    router.reload();
   };
 
   useEffect(() => {
     async function getCurrVoteStatus() {
-      const status = await getElectionStatus();
+      const status = await getElectionStatus(ABI, contractAddress);
       if (!isNaN(status)) {
         setCurrVoteStatus(Number(status));
+        // 0 : registerCandStarted,
+        // 1 : voteStarted,
+        // 2 : voteEnded
       }
     }
     async function getTotalCandidateNumber() {
-      const count = await getTotalCandidateNum();
+      const count = await getTotalCandidateNum(ABI, contractAddress);
       if (!isNaN(count)) {
         setTotalCandidateNum(Number(count));
       }
     }
 
     async function getTotalVoteNumber() {
-      const count = await getTotalVoteCount(address);
+      const count = await getTotalVoteCount(ABI, contractAddress);
       if (!isNaN(count)) {
         setTotalVoteNum(Number(count));
       }
@@ -59,10 +66,10 @@ const CurrVoteInfo = ({ address }) => {
 
   useEffect(() => {
     async function getCandidateInfo(id) {
-      const name = await getCandidateName(address, id);
+      const name = await getCandidateName(ABI, contractAddress, id);
       var voteCount = "-";
-      if (currVoteStatus == 3) {
-        voteCount = await getCandidateVoteCount(address, id);
+      if (currVoteStatus == 2) {
+        voteCount = await getCandidateVoteCount(ABI, contractAddress, id);
       }
       setCandidateList((prev) => [
         ...prev,
@@ -78,36 +85,38 @@ const CurrVoteInfo = ({ address }) => {
   const onClickNextProgress = async () => {
     setModalOpen(true);
     if (currVoteStatus == 0) {
-      const result = await endRegisterCandSession(address);
+      const result = await startVoteSession(ABI, contractAddress);
       setTransactionResult(result);
     } else if (currVoteStatus == 1) {
-      const result = await startVoteSession(address);
+      const result = await endVoteSession(ABI, contractAddress);
       setTransactionResult(result);
-    } else if (currVoteStatus == 2) {
-      const result = await endVoteSession(address);
-      setTransactionResult(result);
-    }
+    } 
   };
 
-  /// 등록된 Cadidate 불러오기
+  const onClickReopenVote = async () => {
+    setModalOpen(true);
+    const result = await restartVoteSession(ABI, contractAddress);
+    setTransactionResult(result);
+  };
 
   return (
     <S.RootStyle>
-      <S.Title> 현재 투표 정보</S.Title>
-      <S.WhiteInfo>현재 투표 status</S.WhiteInfo>
-      <S.VoteStatusContainer>
-        <S.VoteStatus disabled={currVoteStatus != 0}>
-          후보자 등록 진행중
-        </S.VoteStatus>
-        <ArrowForwardIosIcon sx={{ color: "grey" }} />
-        <S.VoteStatus disabled={currVoteStatus != 1}>
-          후보자 등록 완료
-        </S.VoteStatus>
-        <ArrowForwardIosIcon sx={{ color: "grey" }} />
-        <S.VoteStatus disabled={currVoteStatus != 2}>Vote 시작</S.VoteStatus>
-        <ArrowForwardIosIcon sx={{ color: "grey" }} />
-        <S.VoteStatus disabled={currVoteStatus != 3}>Vote 완료</S.VoteStatus>
-      </S.VoteStatusContainer>
+      <S.Title>
+        <div style={{ color: "#b2ddef", marginRight: 10 }}>{name}</div> 투표
+        정보
+      </S.Title>
+      <S.VoteStatusWrapper>
+        <S.WhiteInfo>현재 투표 status</S.WhiteInfo>
+        <S.VoteStatusContainer>
+          <S.VoteStatus disabled={currVoteStatus != 0}>
+            후보자 등록 진행중
+          </S.VoteStatus>
+          <ArrowForwardIosIcon sx={{ color: "grey" }} />
+          <S.VoteStatus disabled={currVoteStatus != 1}>Vote 시작</S.VoteStatus>
+          <ArrowForwardIosIcon sx={{ color: "grey" }} />
+          <S.VoteStatus disabled={currVoteStatus != 2}>Vote 완료</S.VoteStatus>
+        </S.VoteStatusContainer>
+      </S.VoteStatusWrapper>
       <S.WhiteInfo>현재 등록된 후보자 수: {totalCandidateNum}</S.WhiteInfo>
       <S.WhiteInfo>현재까지 총 투표 수: {totalVoteNum}</S.WhiteInfo>
       <S.WhiteInfo>현재 등록된 후보자 정보</S.WhiteInfo>
@@ -120,12 +129,16 @@ const CurrVoteInfo = ({ address }) => {
         );
       })}
 
-      <S.NextProgress
-        disabled={currVoteStatus == 3}
-        onClick={onClickNextProgress}
-      >
-        다음 투표 과정으로 넘어가기
-      </S.NextProgress>
+      {currVoteStatus != 2 && (
+        <S.NextProgress onClick={onClickNextProgress}>
+          다음 투표 과정으로 넘어가기
+        </S.NextProgress>
+      )}
+      {currVoteStatus == 2 && (
+        <S.NextProgress onClick={onClickReopenVote}>
+          투표 다시 재개하기
+        </S.NextProgress>
+      )}
       <TransactionDialog
         open={modalOpen}
         result={transactionResult}

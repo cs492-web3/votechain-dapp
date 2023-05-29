@@ -3,8 +3,8 @@ import { css, Typography, Button, TextField } from "@mui/material";
 
 export const RootStyle = styled("div")(() => ({
   marginTop: 40,
-  marginLeft: "4rem",
-  marginRight: "4rem",
+  marginLeft: "10px",
+  marginRight: "10px",
   height: "100%",
 }));
 

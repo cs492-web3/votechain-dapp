@@ -4,43 +4,74 @@ import * as S from "./index.styles";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 import { walletAddressState } from "../atom";
-import { getIsAdmin, startVoteSession } from "../../utils/interact";
+import { getIsAdmin, startVoteSession, fetchContractABI } from "../api/voteAPI";
+import { getAllContracts } from "../api/adminAPI";
 import TransactionDialog from "../../components/TransactionDialog";
 import CurrVoteInfo from "./components/CurrVoteInfo";
 
 export default function Admin() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminContractList, setAdminContractList] = useState([]);
+  const [allContractList, setAllContractList] = useState([]);
   const address = useRecoilValue(walletAddressState);
   const [modalOpen, setModalOpen] = useState(false);
   const [transactionResult, setTransactionResult] = useState({});
 
   useEffect(() => {
-    async function checkIsAdmin() {
-      if (address != "") {
-        const admin = await getIsAdmin(address);
-        console.log(admin);
-        setIsAdmin(admin);
+    async function allContracts() {
+      var contractList = await getAllContracts();
+      contractList = contractList.filter((contract) => !contract.isDeleted);
+      setAllContractList(contractList);
+    }
+    allContracts();
+  }, []);
+
+  useEffect(() => {
+    async function checkIsAdmin(contract) {
+      if (contract.contractAddress != "") {
+        const ABI = await fetchContractABI(contract.contractAddress);
+        const isAdmin = await getIsAdmin(ABI, contract.contractAddress);
+        const newData = {
+          name: contract.name,
+          contractAddress: contract.contractAddress,
+          ABI: ABI,
+        };
+        if (isAdmin) {
+          setAdminContractList((prev) => [...prev, newData]);
+        }
       }
     }
-    checkIsAdmin();
-    console.log("address: ", address);
-  }, [address]);
+    setAdminContractList([]);
+    allContractList.map((contract) => {
+      checkIsAdmin(contract);
+    });
+  }, [allContractList]);
 
   const handleModalClose = () => {
     if (Object.entries(setTransactionResult).length != 0) {
       setModalOpen(false);
+      router.reload();
     }
   };
   const onClickClose = () => {
     setModalOpen(false);
+    router.reload();
   };
 
   return (
     <S.RootStyle>
-      {isAdmin ? (
+      {adminContractList.length != 0 ? (
         <>
           <S.Title>관리자 페이지에 오신 것을 환영합니다</S.Title>
-          <CurrVoteInfo address={address} />
+          {adminContractList.map((contract, index) => {
+            return (
+              <CurrVoteInfo
+                key={index}
+                contractAddress={contract.contractAddress}
+                name={contract.name}
+                ABI={contract.ABI}
+              />
+            );
+          })}
         </>
       ) : (
         <S.Title>관리자가 아닙니다</S.Title>

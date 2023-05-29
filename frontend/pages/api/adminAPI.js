@@ -6,7 +6,7 @@ const alchemyKey = process.env.REACT_APP_ALCHEMY_KEY;
 const web3 = createAlchemyWeb3(alchemyKey);
 
 // 전체 vote 관리자의 contract address
-const contractAddress = "0xC5D10bBdd1186cbd0677dEbB3F8E275621524904";
+const contractAddress = "0x12D1FC33d8aa9b1E4bb1F2e8e2E97EC7efb28F94";
 
 export const adminContract = new web3.eth.Contract(
   contractABI,

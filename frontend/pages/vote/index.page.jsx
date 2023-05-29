@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as S from "./index.styles";
 import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
-import {
-  walletAddressState,
-  contractAddressState,
-  contractABIState,
-} from "../atom";
+import { walletAddressState } from "../atom";
 
 import {
   getCandidateName,
@@ -16,26 +12,26 @@ import {
 } from "../api/voteAPI";
 import TransactionDialog from "../../components/TransactionDialog";
 import { useRouter } from "next/router";
+import NFTDialog from "../../components/NFTDialog";
 
 const Vote = () => {
   const router = useRouter();
   const [transactionResult, setTransactionResult] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [contractAddress, setContractAddress] =
-    useRecoilState(contractAddressState);
-  const [contractABI, setContractABI] = useRecoilState(contractABIState);
-  const address = useRecoilValue(walletAddressState);
+  const [contractAddress, setContractAddress] = useState("");
+  const [contractABI, setContractABI] = useState("");
+  const walletAddress = useRecoilValue(walletAddressState);
   const [tokenId, setTokenId] = useState("");
-  const [NFTTokenCA, setNFTTokenCA] = useState("");
+  const [NFTCA, setNFTCA] = useState("");
   const [totalCandidateNum, setTotalCandidateNum] = useState(0);
   const [candidateList, setCandidateList] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
 
   // contract address를 바탕으로 ABI 가져오기
   useEffect(() => {
-    const address = router.asPath.split(/\?/)[1].split("=")[1];
-    const baseurl = "http://api-goerli.etherscan.io/api";
+    const address = router.query["address"];
+    const baseurl = "https://api-goerli.etherscan.io/api";
     const params = {
       module: "contract",
       action: "getabi",
@@ -46,6 +42,7 @@ const Vote = () => {
     const queryString = new URLSearchParams(params).toString(); // url에 쓰기 적합한 querySting으로 return 해준다.
     const requrl = `${baseurl}?${queryString}`;
     setContractAddress(address);
+
     const fetchContractABI = async () => {
       const response = await fetch(requrl);
       const json = await response.json();
@@ -58,14 +55,16 @@ const Vote = () => {
       }
     };
 
-    fetchContractABI();
-  }, []);
+    if (address != undefined) {
+      fetchContractABI();
+    }
+  }, [router.query]);
 
   // 전체 투표 후보 수 구하기
   useEffect(() => {
     async function getTotalCandidateNumber() {
       const ABI = JSON.parse(JSON.stringify(contractABI));
-      const count = await getTotalCandidateNum(ABI);
+      const count = await getTotalCandidateNum(ABI, contractAddress);
       if (!isNaN(count)) {
         setTotalCandidateNum(Number(count));
       }
@@ -79,7 +78,7 @@ const Vote = () => {
   useEffect(() => {
     async function getCandidateInfo(id) {
       const ABI = JSON.parse(JSON.stringify(contractABI));
-      const name = await getCandidateName(ABI, address, id);
+      const name = await getCandidateName(ABI, contractAddress, id);
       setCandidateList((prev) => [...prev, name]);
     }
 
@@ -90,21 +89,22 @@ const Vote = () => {
     }
   }, [totalCandidateNum]);
 
+  //NFT 정보 가져오기
   useEffect(() => {
     async function getNFT() {
       const ABI = JSON.parse(JSON.stringify(contractABI));
-      const newTokenId = await getTokenId(ABI, address);
-      const newNFTTokenCA = await getNFTTokenCA(ABI);
+      const newTokenId = await getTokenId(ABI, contractAddress);
+      const newNFTCA = await getNFTTokenCA(ABI, contractAddress);
+      console.log("NFTTokenCA ", NFTCA);
+      console.log("tokenId", tokenId);
       setTokenId(newTokenId);
-      setNFTTokenCA(newNFTTokenCA);
+      setNFTCA(newNFTCA);
     }
 
-    if (contractABI != "" && contractAddress != "" && address != "") {
+    if (contractABI != "" && contractAddress != "" && walletAddress != "") {
       getNFT();
-      console.log("NFTTokenCA ", NFTTokenCA);
-      console.log("tokenId", tokenId);
     }
-  }, [address]);
+  }, [contractABI, contractAddress, walletAddress]);
 
   const handleClick = (e) => {
     setSelectedId(Number(e.target.id));
@@ -116,7 +116,7 @@ const Vote = () => {
     } else {
       const ABI = JSON.parse(JSON.stringify(contractABI));
       setModalOpen(true);
-      const result = await voteAndGetNFT(ABI, address, selectedId);
+      const result = await voteAndGetNFT(ABI, contractAddress, selectedId);
       setTransactionResult(result);
     }
   };
@@ -124,10 +124,12 @@ const Vote = () => {
   const handleModalClose = () => {
     if (Object.entries(setTransactionResult).length != 0) {
       setModalOpen(false);
+      router.reload();
     }
   };
   const onClickClose = () => {
     setModalOpen(false);
+    router.reload();
   };
 
   return (
@@ -148,7 +150,7 @@ const Vote = () => {
         })}
       </S.CandidateContainer>
       <S.VoteButton onClick={voteHandler}>투표하기</S.VoteButton>
-
+      {/* <NFTDialog NFTCA={NFTCA} tokenId={tokenId} /> */}
       <TransactionDialog
         open={modalOpen}
         result={transactionResult}
