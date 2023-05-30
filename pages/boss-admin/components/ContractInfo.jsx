@@ -4,13 +4,13 @@ import { deleteContract, reopenContract } from "../../api/adminAPI";
 import { useRecoilValue } from "recoil";
 import { walletAddressState } from "../../atom";
 import TransactionDialog from "../../../components/TransactionDialog";
-
+import { useRouter } from "next/router";
 const ContractInfo = ({ data }) => {
   const [transactionResult, setTransactionResult] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
   const address = useRecoilValue(walletAddressState);
-
+  const router = useRouter();
   const handleModalClose = () => {
     if (Object.entries(setTransactionResult).length != 0) {
       setModalOpen(false);
@@ -27,11 +27,9 @@ const ContractInfo = ({ data }) => {
     setModalOpen(true);
     if (data.isDeleted) {
       const result = await reopenContract(address, Number(data.id));
-      console.log(result);
       setTransactionResult(result);
     } else {
       const result = await deleteContract(address, Number(data.id));
-      console.log(result);
       setTransactionResult(result);
     }
   };

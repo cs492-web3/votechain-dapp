@@ -10,6 +10,14 @@ export const Title = styled("Typography")(() => ({
   margin: 20,
 }));
 
+export const VoteTitle = styled("Typography")(() => ({
+  variant: "h1",
+  align: "center",
+  color: "white",
+  fontSize: 30,
+  margin: 20,
+}));
+
 export const RootStyle = styled("div")(() => ({
   display: "flex",
   flexDirection: "column",

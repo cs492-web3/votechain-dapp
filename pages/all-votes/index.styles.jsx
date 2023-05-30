@@ -14,6 +14,11 @@ export const VoteContainer = styled("div")(() => ({
   margin: 10,
 }));
 
+export const ImageContainer = styled("div")(() => ({
+  height: "180px",
+  marginTop: 20,
+  position: "relative",
+}));
 export const Title = styled(Typography)`
   variant: h1;
   align: center;

@@ -16,7 +16,6 @@ const AddContract = () => {
   const addContractHandler = async () => {
     setModalOpen(true);
     const result = await addContract(address, contractName, contractAddress);
-    console.log(result);
     setTransactionResult(result);
   };
 

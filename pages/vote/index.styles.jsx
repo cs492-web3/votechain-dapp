@@ -3,11 +3,19 @@ import { css, Button, Typography, } from "@mui/material";
 import { blue } from "@mui/material/colors";
 
 export const Title = styled(Typography)(() => ({
+  variant: "h2",
+  align: "center",
+  color: "#cce8f4",
+  fontSize: 25,
+  margin: 20,
+}));
+
+export const Description = styled(Typography)(() => ({
   variant: "h1",
   align: "center",
   color: "white",
   fontSize: 25,
-  margin: 20,
+  marginBottom: 20,
 }));
 
 export const RootStyle = styled("div")(() => ({

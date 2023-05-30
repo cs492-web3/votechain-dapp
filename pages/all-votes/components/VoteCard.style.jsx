@@ -5,10 +5,9 @@ export const Contract = styled(Button)(() => ({
   flexDirection: "column",
   border: "1px solid #42a5f5",
   color: "white",
-  padding: 20,
+  padding: 5,
   margin: 10,
   borderRadius: 20,
-  height: "120px",
 }));
 
 export const VotedContract = styled(Button)(() => ({
@@ -16,17 +15,25 @@ export const VotedContract = styled(Button)(() => ({
   flexDirection: "column",
   border: "1px solid grey",
   color: "grey",
-  padding: 20,
+  padding: 5,
   margin: 10,
   borderRadius: 20,
-  height: "120px",
 }));
 
 export const Info = styled(Typography)`
-  color: white;
+  color: #b2ddef;
   font-size: 18px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-transform: none;
+`;
+
+export const Description = styled(Typography)`
+  color: white;
+  font-size: 22px;
   margin-top: 10px;
   margin-bottom: 10px;
+  text-transform: none;
 `;
 
 export const VoteStatus = styled("div")((props) => ({
@@ -34,6 +41,7 @@ export const VoteStatus = styled("div")((props) => ({
   borderRadius: 20,
   borderColor: props.disabled ? "grey" : "#1976d2",
   color: props.disabled ? "grey" : "#1976d2",
+  fontSize : '18px'
 }));
 
 export const VoteStatusWrapper = styled("div")`

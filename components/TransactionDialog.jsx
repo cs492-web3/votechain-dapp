@@ -21,7 +21,7 @@ export default function TransactionDialog({
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth={"sm"}
+        maxWidth={"xl"}
         fullWidth={true}
       >
         <DialogTitle id="alert-dialog-title">
@@ -30,20 +30,22 @@ export default function TransactionDialog({
         <DialogContent>
           {Object.entries(result).length != 0 ? (
             <DialogContentText id="alert-dialog-description">
-              <div>{`트랜잭션 결과 : ${result.status}`}</div>
+              <div>{`Transaction Result : ${result.status}`}</div>
               <div>{result.message}</div>
             </DialogContentText>
           ) : (
             <DialogContentText id="alert-dialog-description">
-              트랜잭션 진행 중
+              Transaction ongoing
             </DialogContentText>
           )}
 
-          {NFTCA && tokenId && <NFTDialog NFTCA={NFTCA} tokenId={tokenId} />}
+          {result.status == "success" && NFTCA && tokenId && (
+            <NFTDialog NFTCA={NFTCA} tokenId={tokenId} />
+          )}
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClickClose}>닫기</Button>
+          <Button onClick={onClickClose}>CLOSE</Button>
         </DialogActions>
       </Dialog>
     </div>

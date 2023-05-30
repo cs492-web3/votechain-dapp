@@ -9,6 +9,8 @@ import {
   voteAndGetNFT,
   getRecentTokenId,
   getNFTTokenCA,
+  getDescription,
+  getIsShowResultImm,
 } from "../api/voteAPI";
 import TransactionDialog from "../../components/TransactionDialog";
 import { useRouter } from "next/router";
@@ -27,6 +29,9 @@ const Vote = () => {
   const [totalCandidateNum, setTotalCandidateNum] = useState(0);
   const [candidateList, setCandidateList] = useState([]);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
+
+  const [description, setDescription] = useState("");
+  const [isShowResultImm, setIsShowResultImm] = useState(false);
 
   // contract address를 바탕으로 ABI 가져오기
   useEffect(() => {
@@ -65,10 +70,15 @@ const Vote = () => {
     async function getTotalCandidateNumber() {
       const ABI = JSON.parse(JSON.stringify(contractABI));
       const count = await getTotalCandidateNum(ABI, contractAddress);
+      const InfoText = await getDescription(ABI, contractAddress);
+      const isShowImm = await getIsShowResultImm(ABI, contractAddress);
       if (!isNaN(count)) {
         setTotalCandidateNum(Number(count));
+        setDescription(InfoText);
+        setIsShowResultImm(Boolean(Number(isShowImm)));
       }
     }
+
     if (contractABI != "" && contractAddress != "") {
       getTotalCandidateNumber();
     }
@@ -81,7 +91,6 @@ const Vote = () => {
       const name = await getCandidateName(ABI, contractAddress, id);
       setCandidateList((prev) => [...prev, name]);
     }
-
     if (contractABI != "" && contractAddress != "") {
       for (let id = 0; id < totalCandidateNum; id++) {
         getCandidateInfo(id);
@@ -95,9 +104,7 @@ const Vote = () => {
       const ABI = JSON.parse(JSON.stringify(contractABI));
       const newTokenId = await getRecentTokenId(ABI, contractAddress);
       const newNFTCA = await getNFTTokenCA(ABI, contractAddress);
-      console.log("NFTTokenCA ", NFTCA);
-      console.log("tokenId", tokenId);
-      setTokenId(newTokenId);
+      setTokenId(String(Number(newTokenId) + 1));
       setNFTCA(newNFTCA);
     }
 
@@ -107,10 +114,16 @@ const Vote = () => {
   }, [contractABI, contractAddress, walletAddress]);
 
   const handleClick = (e) => {
-    if (Number(e.target.id) in selectedCandidates) {
-      setSelectedCandidates((prev) => prev.filter((i) => i != Number(e.target.id)));
+    if (contractAddress == "0x22c55175979861e95C79543d5028DE8Cf1a57bF8") {
+      setSelectedCandidates([Number(e.target.id)]);
     } else {
-      setSelectedCandidates((prev) => [...prev, Number(e.target.id)]);
+      if (Number(e.target.id) in selectedCandidates) {
+        setSelectedCandidates((prev) =>
+          prev.filter((i) => i != Number(e.target.id))
+        );
+      } else {
+        setSelectedCandidates((prev) => [...prev, Number(e.target.id)]);
+      }
     }
   };
 
@@ -132,22 +145,31 @@ const Vote = () => {
   const handleModalClose = () => {
     if (Object.entries(setTransactionResult).length != 0) {
       setModalOpen(false);
-      router.reload();
+      if (isShowResultImm && transactionResult.status == "success") {
+        router.push({ pathname: "/vote-results" });
+      } else {
+        router.push({ pathname: "/all-votes" });
+      }
     }
   };
   const onClickClose = () => {
     setModalOpen(false);
-    router.reload();
+    if (isShowResultImm && transactionResult.status == "success") {
+      router.push({ pathname: "/vote-results" });
+    } else {
+      router.push({ pathname: "/all-votes" });
+    }
   };
 
   return (
     <S.RootStyle>
-      <S.Title>투표를 해주세요!</S.Title>
+      <S.Title>Let's Vote and Get NFT! 🌌</S.Title>
+      <S.Description>{description}</S.Description>
       <S.CandidateContainer>
         {candidateList.map((name, index) => {
           return (
             <S.Candidate
-              selected={index in selectedCandidates}
+              selected={selectedCandidates.includes(index)}
               key={index}
               id={index}
               onClick={handleClick}

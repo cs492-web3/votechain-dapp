@@ -3,34 +3,32 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
-  Title,
   Tooltip,
-  Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
 const ResultChart = ({ voteData, voteLabels }) => {
-  const title = "dhakjshdk";
+  const defaultColor = [
+    "#4dc9f6",
+    "#f67019",
+    "#f53794",
+    "#537bc4",
+    "#acc236",
+    "#166a8f",
+    "#00a950",
+    "#58595b",
+    "#8549ba",
+  ];
+
   const data = {
     labels: voteLabels,
     datasets: [
       {
         label: "Vote Result",
         data: voteData,
-        backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-        ],
+        backgroundColor: defaultColor,
         hoverOffset: 4,
       },
     ],
@@ -38,18 +36,46 @@ const ResultChart = ({ voteData, voteLabels }) => {
 
   const options = {
     responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
+    scales: {
+      x: {
+        grid: {
+          color: "#444",
+        },
+        ticks: {
+          color: "#fff",
+          font: {
+            size: 20,
+            color: "#fff",
+          },
+        },
       },
-      title: {
-        display: true,
-        text: title,
+      y: {
+        grid: {
+          color: "#444",
+        },
+        min: 0,
+        suggestedMin: 1,
+        suggestedMax: 10,
+        ticks: {
+          color: "#fff",
+          font: {
+            size: 18,
+          },
+        },
       },
     },
   };
   return (
-    <div style={{ width: "100%" }}>
+    <div
+      style={{
+        margin: "50px",
+        height: "60vh",
+        width: "80%",
+        alignItems: "center",
+        justifyContent: "center",
+        display: "flex",
+      }}
+    >
       <Bar options={options} data={data} />
     </div>
   );

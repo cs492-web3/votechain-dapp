@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import * as S from "./index.styles";
 import ResultChart from "./components/ResultChart";
 import { useRouter } from "next/router";
-import { getTotalCandidateNum, getCandidateName, getCandidateVoteCount } from "../api/voteAPI";
+import {
+  fetchContractABI,
+  getTotalCandidateNum,
+  getCandidateName,
+  getCandidateVoteCount,
+  getDescription,
+} from "../api/voteAPI";
 
 const VoteResults = () => {
   const router = useRouter();
@@ -11,6 +17,7 @@ const VoteResults = () => {
 
   const [contractAddress, setContractAddress] = useState("");
   const [contractABI, setContractABI] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     async function getTotalCandidateNumber() {
@@ -19,50 +26,34 @@ const VoteResults = () => {
         setTotalCandidateNum(Number(count));
       }
     }
+
+    async function getVoteDescription() {
+      const text = await getDescription(contractABI, contractAddress);
+      setDescription(text);
+    }
     if (contractABI != "" && contractAddress != "") {
       getTotalCandidateNumber();
+      getVoteDescription();
     }
-  }, []);
+  }, [contractABI, contractAddress]);
 
-  // contract address를 바탕으로 ABI 가져오기
   useEffect(() => {
-    const address = router.query["address"];
-    const baseurl = "https://api-goerli.etherscan.io/api";
-    const params = {
-      module: "contract",
-      action: "getabi",
-      address: address,
-      apikey: process.env.ETHERSCAN_API_KEY,
-    };
-
-    const queryString = new URLSearchParams(params).toString(); // url에 쓰기 적합한 querySting으로 return 해준다.
-    const requrl = `${baseurl}?${queryString}`;
-    setContractAddress(address);
-
-    const fetchContractABI = async () => {
-      const response = await fetch(requrl);
-      const json = await response.json();
-      if (json.status == "1") {
-        const abi = JSON.parse(json.result);
-        setContractABI(abi);
-      } else {
-        alert(json.result);
-        router.back();
+    async function getABI() {
+      const address = router.query["address"];
+      if (address != undefined) {
+        setContractAddress(address);
+        const ABI = await fetchContractABI(address);
+        setContractABI(ABI);
       }
-    };
-
-    if (address != undefined) {
-      fetchContractABI();
     }
+    getABI();
   }, [router.query]);
 
   useEffect(() => {
     async function getCandidateInfo(id) {
       const name = await getCandidateName(contractABI, contractAddress, id);
       var voteCount = 0;
-
       voteCount = await getCandidateVoteCount(contractABI, contractAddress, id);
-
       setCandidateList((prev) => [
         ...prev,
         { name: name, voteCount: voteCount },
@@ -76,11 +67,10 @@ const VoteResults = () => {
     }
   }, [totalCandidateNum]);
 
-  console.log(candidateList);
-
   return (
     <S.RootStyle>
-      <S.Title> 투표 결과입니다 </S.Title>
+      <S.VoteTitle> {description} </S.VoteTitle>
+      <S.Title> Check Vote Results! </S.Title>
       <ResultChart
         voteData={candidateList.map((cand) => cand.voteCount)}
         voteLabels={candidateList.map((cand) => cand.name)}

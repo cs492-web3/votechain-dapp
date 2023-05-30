@@ -11,6 +11,7 @@ import {
   endVoteSession,
   getTotalVoteCount,
   restartVoteSession,
+  getDescription,
 } from "../../api/voteAPI";
 import TransactionDialog from "../../../components/TransactionDialog";
 import { useRouter } from "next/router";
@@ -21,6 +22,7 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
   const [candidateList, setCandidateList] = useState([]);
   const [totalCandidateNum, setTotalCandidateNum] = useState();
   const [totalVoteNum, setTotalVoteNum] = useState();
+  const [voteDescription, setVoteDescription] = useState("");
 
   const [transactionResult, setTransactionResult] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
@@ -59,9 +61,15 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
         setTotalVoteNum(Number(count));
       }
     }
+    async function getVoteDescription() {
+      const description = await getDescription(ABI, contractAddress);
+      setVoteDescription(description);
+    }
+
     getTotalCandidateNumber();
     getCurrVoteStatus();
     getTotalVoteNumber();
+    getVoteDescription();
   }, []);
 
   useEffect(() => {
@@ -81,7 +89,6 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
       getCandidateInfo(id);
     }
   }, [totalCandidateNum]);
-
 
   const onClickNextProgress = async () => {
     setModalOpen(true);
@@ -103,8 +110,10 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
   return (
     <S.RootStyle>
       <S.Title>
-        <div style={{ color: "#b2ddef", marginRight: 10 }}>{name}</div> 투표
-        정보
+        <div style={{ color: "#b2ddef", marginRight: 10 }}>
+          {voteDescription}
+        </div>{" "}
+        투표 정보
       </S.Title>
       <S.VoteStatusWrapper>
         <S.WhiteInfo>현재 투표 status</S.WhiteInfo>
