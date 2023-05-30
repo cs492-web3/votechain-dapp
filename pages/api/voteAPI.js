@@ -101,6 +101,24 @@ export const voteAndGetNFT = async (
   return result;
 };
 
+export const registerAndGetNFT = async (
+  contractABI,
+  contractAddress,
+  candidateName
+) => {
+  const walletAddress = getRecoil(walletAddressState);
+  const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
+  const registerABI = ElectionContract.methods
+    .registerCandidateAndGetNFT(candidateName)
+    .encodeABI();
+  const result = await makeTransaction(
+    walletAddress,
+    registerABI,
+    contractAddress
+  );
+  return result;
+};
+
 export const getTotalCandidateNum = async (contractABI, contractAddress) => {
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
   const totalNum = await ElectionContract.methods.getTotalCandidateNum().call();
@@ -117,6 +135,14 @@ export const getCandidateName = async (
   const candidateName = await ElectionContract.methods
     .getCandidateName(candidateId)
     .call({ from: walletAddress });
+  return candidateName;
+};
+
+export const getAllCandidateNames = async (contractABI, contractAddress) => {
+  const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
+  const candidateName = await ElectionContract.methods
+    .getAllCandidateNames()
+    .call();
   return candidateName;
 };
 
@@ -151,11 +177,11 @@ export const getIsAdmin = async (contractABI, contractAddress) => {
   return isAdmin;
 };
 
-export const getTokenId = async (contractABI, contractAddress) => {
+export const getRecentTokenId = async (contractABI, contractAddress) => {
   const walletAddress = getRecoil(walletAddressState);
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
   const tokenId = await ElectionContract.methods
-    .getTokenId(walletAddress)
+    .getRecentTokenId(walletAddress)
     .call();
   console.log(tokenId);
   return tokenId;
@@ -181,6 +207,15 @@ export const getHasVoted = async (contractABI, contractAddress) => {
     .getHasVoted(walletAddress)
     .call();
   return hasVoted;
+};
+
+export const getRegisterNum = async (contractABI, contractAddress) => {
+  const walletAddress = getRecoil(walletAddressState);
+  const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
+  const registerNum = await ElectionContract.methods
+    .getRegisterNum(walletAddress)
+    .call();
+  return registerNum;
 };
 
 async function makeTransaction(walletAddress, methodABI, contractAddress) {
