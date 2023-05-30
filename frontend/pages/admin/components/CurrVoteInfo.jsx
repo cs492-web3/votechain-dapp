@@ -82,6 +82,7 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
     }
   }, [totalCandidateNum]);
 
+
   const onClickNextProgress = async () => {
     setModalOpen(true);
     if (currVoteStatus == 0) {
@@ -90,7 +91,7 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
     } else if (currVoteStatus == 1) {
       const result = await endVoteSession(ABI, contractAddress);
       setTransactionResult(result);
-    } 
+    }
   };
 
   const onClickReopenVote = async () => {

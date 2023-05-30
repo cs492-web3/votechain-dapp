@@ -7,7 +7,7 @@ import {
   getCandidateName,
   getTotalCandidateNum,
   voteAndGetNFT,
-  getTokenId,
+  getRecentTokenId,
   getNFTTokenCA,
 } from "../api/voteAPI";
 import TransactionDialog from "../../components/TransactionDialog";
@@ -26,7 +26,7 @@ const Vote = () => {
   const [NFTCA, setNFTCA] = useState("");
   const [totalCandidateNum, setTotalCandidateNum] = useState(0);
   const [candidateList, setCandidateList] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedCandidates, setSelectedCandidates] = useState([]);
 
   // contract address를 바탕으로 ABI 가져오기
   useEffect(() => {
@@ -93,7 +93,7 @@ const Vote = () => {
   useEffect(() => {
     async function getNFT() {
       const ABI = JSON.parse(JSON.stringify(contractABI));
-      const newTokenId = await getTokenId(ABI, contractAddress);
+      const newTokenId = await getRecentTokenId(ABI, contractAddress);
       const newNFTCA = await getNFTTokenCA(ABI, contractAddress);
       console.log("NFTTokenCA ", NFTCA);
       console.log("tokenId", tokenId);
@@ -107,16 +107,24 @@ const Vote = () => {
   }, [contractABI, contractAddress, walletAddress]);
 
   const handleClick = (e) => {
-    setSelectedId(Number(e.target.id));
+    if (Number(e.target.id) in selectedCandidates) {
+      setSelectedCandidates((prev) => prev.filter((i) => i != Number(e.target.id)));
+    } else {
+      setSelectedCandidates((prev) => [...prev, Number(e.target.id)]);
+    }
   };
 
   const voteHandler = async () => {
-    if (selectedId == null) {
+    if (selectedCandidates.length == 0) {
       alert("후보자를 선택해주세요");
     } else {
       const ABI = JSON.parse(JSON.stringify(contractABI));
       setModalOpen(true);
-      const result = await voteAndGetNFT(ABI, contractAddress, selectedId);
+      const result = await voteAndGetNFT(
+        ABI,
+        contractAddress,
+        selectedCandidates
+      );
       setTransactionResult(result);
     }
   };
@@ -139,7 +147,7 @@ const Vote = () => {
         {candidateList.map((name, index) => {
           return (
             <S.Candidate
-              selected={index == selectedId}
+              selected={index in selectedCandidates}
               key={index}
               id={index}
               onClick={handleClick}

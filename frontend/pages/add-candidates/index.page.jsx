@@ -3,9 +3,12 @@ import * as S from "./index.styles";
 import { Paper, TextField } from "@mui/material";
 import {
   registerCandidate,
-  getTotalCandidateNum,
-  getCandidateName,
   getElectionStatus,
+  getRecentTokenId,
+  getAllCandidateNames,
+  getNFTTokenCA,
+  registerAndGetNFT,
+  getRegisterNum,
 } from "../api/voteAPI";
 import { useRecoilValue } from "recoil";
 import { walletAddressState } from "../atom";
@@ -17,7 +20,8 @@ const AddCandidates = () => {
   const [totalCandidateNum, setTotalCandidateNum] = useState(0);
   const [candidateList, setCandidateList] = useState([]);
 
-  const [selectedId, setSelectedId] = useState(null);
+  const [tokenId, setTokenId] = useState("");
+  const [NFTCA, setNFTCA] = useState("");
 
   const [transactionResult, setTransactionResult] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
@@ -26,6 +30,8 @@ const AddCandidates = () => {
   const walletAddress = useRecoilValue(walletAddressState);
   const [contractAddress, setContractAddress] = useState("");
   const [contractABI, setContractABI] = useState("");
+
+  const [registerNum, setRegisterNum] = useState(0);
 
   // contract address를 바탕으로 ABI 가져오기
   useEffect(() => {
@@ -77,15 +83,36 @@ const AddCandidates = () => {
     }
   }, [router.query]);
 
+  //NFT 정보 가져오기
+  useEffect(() => {
+    async function getNFT() {
+      const ABI = JSON.parse(JSON.stringify(contractABI));
+      const newTokenId = await getRecentTokenId(ABI, contractAddress);
+      const newNFTCA = await getNFTTokenCA(ABI, contractAddress);
+      console.log("NFTTokenCA ", NFTCA);
+      console.log("tokenId", tokenId);
+      setTokenId(newTokenId);
+      setNFTCA(newNFTCA);
+    }
+
+    if (contractABI != "" && contractAddress != "" && walletAddress != "") {
+      getNFT();
+    }
+  }, [contractABI, contractAddress, walletAddress]);
+
   const addCandidateHandler = async () => {
-    setModalOpen(true);
-    const result = await registerCandidate(
-      contractABI,
-      contractAddress,
-      candidateName
-    );
-    console.log(result);
-    setTransactionResult(result);
+    if (registerNum < 3) {
+      setModalOpen(true);
+      const result = await registerAndGetNFT(
+        contractABI,
+        contractAddress,
+        candidateName
+      );
+      console.log(result);
+      setTransactionResult(result);
+    } else {
+      alert("최대 3개까지 등록할 수 있습니다.");
+    }
   };
 
   const handleModalClose = () => {
@@ -101,30 +128,24 @@ const AddCandidates = () => {
   };
 
   useEffect(() => {
-    async function getTotalCandidateNumber() {
-      const count = await getTotalCandidateNum(contractABI, contractAddress);
-      if (!isNaN(count)) {
-        setTotalCandidateNum(Number(count));
-      }
+    async function getAllCandidates() {
+      const candidates = await getAllCandidateNames(
+        contractABI,
+        contractAddress
+      );
+      setCandidateList(candidates);
     }
+
+    async function getRegistedNum() {
+      const registeredNum = await getRegisterNum(contractABI, contractAddress);
+      setRegisterNum(registeredNum);
+    }
+
     if (contractABI != "" && contractAddress != "") {
-      getTotalCandidateNumber();
+      getAllCandidates();
+      getRegistedNum();
     }
   }, [contractABI, contractAddress]);
-
-  useEffect(() => {
-    async function getCandidateInfo(id) {
-      const name = await getCandidateName(contractABI, contractAddress, id);
-      setCandidateList((prev) => [...prev, name]);
-    }
-
-    if (contractABI != "" && contractAddress != "") {
-      for (let id = 0; id < totalCandidateNum; id++) {
-        setCandidateList([]);
-        getCandidateInfo(id);
-      }
-    }
-  }, [totalCandidateNum]);
 
   return (
     <S.RootStyle>
@@ -172,6 +193,8 @@ const AddCandidates = () => {
         handleClose={handleModalClose}
         onClickClose={onClickClose}
         result={transactionResult}
+        NFTCA={NFTCA}
+        tokenId={tokenId}
       />
     </S.RootStyle>
   );
