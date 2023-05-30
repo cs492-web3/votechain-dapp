@@ -62,7 +62,7 @@ const VoteCard = ({ data }) => {
       {data.status == "1" &&
         (data.hasVoted ? (
           !data.isShowResultImm && (
-            <S.VotedContract disabled={false} onClick={onClickVote}>
+            <S.VotedContract disabled={true} onClick={onClickVote}>
               <VoteStatusSteps data={data} />
               <Image
                 alt="Voted"
