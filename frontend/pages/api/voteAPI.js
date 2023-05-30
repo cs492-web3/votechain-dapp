@@ -190,7 +190,6 @@ export const getRecentTokenId = async (contractABI, contractAddress) => {
 export const getNFTTokenCA = async (contractABI, contractAddress) => {
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
   const NFTTokenCA = await ElectionContract.methods.getNFTTokenCA().call();
-  console.log(NFTTokenCA);
   return NFTTokenCA;
 };
 
@@ -216,6 +215,30 @@ export const getRegisterNum = async (contractABI, contractAddress) => {
     .getRegisterNum(walletAddress)
     .call();
   return registerNum;
+};
+
+export const getTokenIds = async (contractABI, contractAddress) => {
+  const walletAddress = getRecoil(walletAddressState);
+  const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
+  const toeknIds = await ElectionContract.methods
+    .getTokenIds(walletAddress)
+    .call();
+  return toeknIds;
+};
+
+export const getIsShowResultImm = async (contractABI, contractAddress) => {
+  const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
+  const isShowResultImm = await ElectionContract.methods
+    .getIsShowResultImm()
+    .call();
+  return isShowResultImm;
+};
+
+export const getDescription = async (contractABI, contractAddress) => {
+  const walletAddress = getRecoil(walletAddressState);
+  const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
+  const description = await ElectionContract.methods.getDescription().call();
+  return description;
 };
 
 async function makeTransaction(walletAddress, methodABI, contractAddress) {

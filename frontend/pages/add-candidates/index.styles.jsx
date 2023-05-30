@@ -73,6 +73,13 @@ export const Info = styled(Typography)`
   margin-bottom: 10px;
 `;
 
+export const None = styled(Typography)`
+  color: grey;
+  font-size: 15px;
+  margin: 10px;
+`;
+
+
 export const RegisterButton = styled(Button)`
   border: 1px solid #42a5f5;
   background-color: rgba(25, 118, 210, 0);

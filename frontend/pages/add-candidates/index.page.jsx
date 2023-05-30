@@ -89,9 +89,7 @@ const AddCandidates = () => {
       const ABI = JSON.parse(JSON.stringify(contractABI));
       const newTokenId = await getRecentTokenId(ABI, contractAddress);
       const newNFTCA = await getNFTTokenCA(ABI, contractAddress);
-      console.log("NFTTokenCA ", NFTCA);
-      console.log("tokenId", tokenId);
-      setTokenId(newTokenId);
+      setTokenId(String(Number(newTokenId) + 1));
       setNFTCA(newNFTCA);
     }
 
@@ -101,17 +99,18 @@ const AddCandidates = () => {
   }, [contractABI, contractAddress, walletAddress]);
 
   const addCandidateHandler = async () => {
-    if (registerNum < 3) {
+    if (candidateName in candidateList) {
+      alert("It's Already Registered Name");
+    } else if (registerNum >= 3) {
+      alert("You Can Add Maximum 3 Candidates");
+    } else {
       setModalOpen(true);
       const result = await registerAndGetNFT(
         contractABI,
         contractAddress,
         candidateName
       );
-      console.log(result);
       setTransactionResult(result);
-    } else {
-      alert("최대 3개까지 등록할 수 있습니다.");
     }
   };
 
@@ -149,29 +148,25 @@ const AddCandidates = () => {
 
   return (
     <S.RootStyle>
-      <S.VoteName>
-        현재 후보자 등록 중인 투표: {router.query["name"]}{" "}
-      </S.VoteName>
-      <S.Title>지금은 후보자 등록 기간입니다! 후보자를 등록해보세요</S.Title>
+      <S.VoteName>{router.query["name"]} </S.VoteName>
+      <S.Title>
+        It's Candidate Registering Period. Try Adding New Candidates and Get
+        NFT! 🎆
+      </S.Title>
       <S.CandidateWrapper>
-        <S.Info> 현재 등록된 후보자</S.Info>
+        <S.Info> Currently Registed Candidate</S.Info>
         <S.CandidateContainer>
-          {candidateList.length == 0 && (
-            <S.Info>
-              {" "}
-              현재 등록된 후보자가 없습니다. 첫번째로 등록해보세요!
-            </S.Info>
-          )}
+          {candidateList.length == 0 && <S.None> NONE</S.None>}
           {candidateList.map((name, index) => {
             return <S.Candidate key={index}>{name}</S.Candidate>;
           })}
         </S.CandidateContainer>
       </S.CandidateWrapper>
       <S.InputContainer>
-        <S.Info> 후보자 등록하기 </S.Info>
+        <S.Info> Register Candidates </S.Info>
         <S.InputTextField
           id="outlined-basic"
-          label="후보자 이름"
+          label="Name"
           variant="outlined"
           value={candidateName}
           onChange={(event) => {
@@ -184,7 +179,7 @@ const AddCandidates = () => {
         />
 
         <S.RegisterButton onClick={addCandidateHandler}>
-          등록하기
+          Register
         </S.RegisterButton>
       </S.InputContainer>
 

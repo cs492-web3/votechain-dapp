@@ -10,7 +10,6 @@ export default function BossAdmin() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [contractList, setContractList] = useState([]);
   const address = useRecoilValue(walletAddressState);
-
   useEffect(() => {
     async function checkIsAdmin() {
       if (address != "") {
@@ -32,8 +31,6 @@ export default function BossAdmin() {
       const contractList = allContracts();
     }
   }, [isAdmin]);
-
-  console.log(contractList);
 
   return (
     <S.RootStyle>
