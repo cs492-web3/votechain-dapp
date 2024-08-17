@@ -41,7 +41,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: yarn install --prod --pure-lockfile
+        run: yarn install --prod
         working-directory: ${{ env.working-directory }}
 
       - name: Build
