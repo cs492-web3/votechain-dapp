@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 22.x
 
-      # Github Repository Secrets를 통해 환경 변수 파일을 생성합니다.
+      # Github Repository Secrets를 통해 환경 변수 파일을 생성
       - name: Generate Environment Variables File for Production
         run: |
           echo "ALCHEMY_API_KEY=$ALCHEMY_API_KEY" >> .env
@@ -29,14 +29,18 @@ jobs:
           REACT_APP_ALCHEMY_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
           REACT_APP_PROJECT_ID: ${{ secrets.ETHERSCAN_API_KEY }}
 
+      # 캐싱 설정
       - name: Cache node_modules
+        id: cache
         uses: actions/cache@v1
         with:
           path: node_modules
           key: ${{runner.OS}}-build-${{hashFiles('**/yarn.lock')}}
           restore-keys: |
             ${{ runner.OS }}-build-${{ runner.OS }}-
+
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --prod --pure-lockfile
         working-directory: ${{ env.working-directory }}
 
