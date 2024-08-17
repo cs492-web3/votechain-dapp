@@ -53,7 +53,7 @@ const AllVotes = () => {
 
   return (
     <S.RootStyle>
-      <S.Title> Currently Ongoing Votes</S.Title>
+      <S.Title>Currently Ongoing Votes 🗳️ </S.Title>
       <S.VoteContainer>
         {contractInfoList.map((data, index) => {
           return <VoteCard key={index} data={data} />;
