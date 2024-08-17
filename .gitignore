@@ -26,7 +26,7 @@ build/Release
 # Dependency directories
 node_modules/
 
-#빌드 파일
+# 빌드 파일
 out/
 
 # TypeScript v1 declaration files
@@ -72,6 +72,7 @@ typings/
 package-lock.json
 yarn.lock
 
-templates/evm/core/pages/api
-
 .DS_Store
+
+# Editor directories
+.idea
