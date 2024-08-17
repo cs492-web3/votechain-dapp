@@ -6,46 +6,27 @@ import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, useAccount, WagmiConfig } from "wagmi";
 import {
   mainnet,
-  polygon,
-  optimism,
-  arbitrum,
   goerli,
-  polygonMumbai,
-  optimismGoerli,
-  arbitrumGoerli,
-  polygonZkEvm,
-  polygonZkEvmTestnet,
-  klaytn,
 } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import MainLayout from "../layout/mainLayout";
 import { useRouter } from "next/router";
 import { walletAddressState } from "./atom";
-import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { getDefaultProvider } from "ethers";
-import { NftProvider, useNft } from "use-nft";
-import Home from "./index.page";
+import { NftProvider } from "use-nft";
 const { chains, provider } = configureChains(
   [
     mainnet,
     goerli,
-    // polygon,
-    // polygonMumbai,
-    // optimism,
-    // optimismGoerli,
-    // arbitrum,
-    // klaytn,
-    // arbitrumGoerli,
-    // polygonZkEvm,
-    // polygonZkEvmTestnet
   ],
   [alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
   appName: "Nupkjuk Votechain",
+  projectId: process.env.REACT_APP_PROJECT_ID,
   chains,
 });
 
