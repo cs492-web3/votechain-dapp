@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import { css, Typography } from "@mui/material";
+import { styled, Typography } from "@mui/material";
 
 export const RootStyle = styled("div")(() => ({
   marginLeft: "10px",

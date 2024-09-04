@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
+import Dotenv from "dotenv-webpack";
 
-const Dotenv = require("dotenv-webpack");
 const productionURL = "https://cs492-web3.github.io/votechain-dapp/";
 const productionPath = "/votechain-dapp";
-const localhost = "https://localhost:3000";
+
 const nextConfig = {
   reactStrictMode: false,
   webpack: (config) => {
@@ -19,4 +19,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

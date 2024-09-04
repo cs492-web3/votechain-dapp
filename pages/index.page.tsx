@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import * as S from "./index.styles";
 import { useAccount } from "wagmi";
@@ -17,7 +18,7 @@ export default function Home() {
   return (
     <S.RootStyle>
       <S.Title>Welcome to Nupjuk Votechain</S.Title>
-      <S.Title>Let's Get Started</S.Title>
+      <S.Title>Let{"'"}s Get Started</S.Title>
       <ConnectButton></ConnectButton>
     </S.RootStyle>
   );

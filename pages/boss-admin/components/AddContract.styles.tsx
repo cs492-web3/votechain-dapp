@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import { css, Typography, Button, TextField } from "@mui/material";
+import { styled, Typography, Button, TextField } from "@mui/material";
 
 export const RootStyle = styled("div")(() => ({
   marginTop: 40,
@@ -16,14 +15,6 @@ export const CardContainer = styled("div")(() => ({
 export const CandidateContainer = styled("div")(() => ({
   display: "flex",
   flexDirection: "row",
-}));
-
-export const CandidateWrapper = styled("div")(() => ({
-  display: "flex",
-  flexDirection: "column",
-  border: "1px solid rgba(255,255,255, 0.3)",
-  padding: "15px",
-  borderRadius: 10,
 }));
 
 export const Candidate = styled("div")(() => ({
@@ -55,15 +46,7 @@ export const Title = styled(Typography)`
   variant: h1;
   color: white;
   font-size: 20px;
-  margin-bottom: 15px;
-`;
-
-export const VoteName = styled(Typography)`
-  variant: h1;
-  color: #cce8f4;
-  font-size: 25px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 10px;
 `;
 
 export const Info = styled(Typography)`
@@ -72,13 +55,6 @@ export const Info = styled(Typography)`
   margin-top: 10px;
   margin-bottom: 10px;
 `;
-
-export const None = styled(Typography)`
-  color: grey;
-  font-size: 15px;
-  margin: 10px;
-`;
-
 
 export const RegisterButton = styled(Button)`
   border: 1px solid #42a5f5;

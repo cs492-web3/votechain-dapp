@@ -28,20 +28,20 @@ const AddCandidates = () => {
   const [candidateName, setCandidateName] = useState("");
 
   const walletAddress = useRecoilValue(walletAddressState);
-  const [contractAddress, setContractAddress] = useState("");
+  const [contractAddress, setContractAddress] = useState<string>("");
   const [contractABI, setContractABI] = useState("");
 
   const [registerNum, setRegisterNum] = useState(0);
 
   // contract address를 바탕으로 ABI 가져오기
   useEffect(() => {
-    const address = router.query["address"];
+    const address = router.query["address"]?.toString() ?? "";
     const baseurl = "https://api-goerli.etherscan.io/api";
     const params = {
       module: "contract",
       action: "getabi",
       address: address,
-      apikey: process.env.ETHERSCAN_API_KEY,
+      apikey: process.env.ETHERSCAN_API_KEY ?? "",
     };
 
     const queryString = new URLSearchParams(params).toString(); // url에 쓰기 적합한 querySting으로 return 해준다.
@@ -108,7 +108,7 @@ const AddCandidates = () => {
       const result = await registerAndGetNFT(
         contractABI,
         contractAddress,
-        candidateName
+        candidateName,
       );
       setTransactionResult(result);
     }
@@ -130,7 +130,7 @@ const AddCandidates = () => {
     async function getAllCandidates() {
       const candidates = await getAllCandidateNames(
         contractABI,
-        contractAddress
+        contractAddress,
       );
       setCandidateList(candidates);
     }
@@ -150,7 +150,7 @@ const AddCandidates = () => {
     <S.RootStyle>
       <S.VoteName>{router.query["name"]} </S.VoteName>
       <S.Title>
-        It's Candidate Registering Period. Try Adding New Candidates and Get
+        It{"'"}s Candidate Registering Period. Try Adding New Candidates and Get
         NFT! 🎆
       </S.Title>
       <S.CandidateWrapper>
@@ -169,7 +169,7 @@ const AddCandidates = () => {
           label="Name"
           variant="outlined"
           value={candidateName}
-          onChange={(event) => {
+          onChange={(event: any) => {
             setCandidateName(event.target.value);
           }}
           inputProps={{ style: { color: "white" } }}

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import { walletAddressState } from "../atom";
 import { getRecoil, setRecoil } from "recoil-nexus";
@@ -34,7 +35,7 @@ export const startVoteSession = async (contractABI, contractAddress) => {
   const result = await makeTransaction(
     walletAddress,
     startABI,
-    contractAddress
+    contractAddress,
   );
   return result;
 };
@@ -54,7 +55,7 @@ export const restartVoteSession = async (contractABI, contractAddress) => {
   const result = await makeTransaction(
     walletAddress,
     restartABI,
-    contractAddress
+    contractAddress,
   );
   return result;
 };
@@ -64,7 +65,7 @@ export const restartVoteSession = async (contractABI, contractAddress) => {
 export const registerCandidate = async (
   contractABI,
   contractAddress,
-  candidateName
+  candidateName,
 ) => {
   const walletAddress = getRecoil(walletAddressState);
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
@@ -74,7 +75,7 @@ export const registerCandidate = async (
   const result = await makeTransaction(
     walletAddress,
     registerABI,
-    contractAddress
+    contractAddress,
   );
   return result;
 };
@@ -90,7 +91,7 @@ export const vote = async (contractABI, contractAddress, candidateId) => {
 export const voteAndGetNFT = async (
   contractABI,
   contractAddress,
-  candidateId
+  candidateId,
 ) => {
   const walletAddress = getRecoil(walletAddressState);
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
@@ -104,7 +105,7 @@ export const voteAndGetNFT = async (
 export const registerAndGetNFT = async (
   contractABI,
   contractAddress,
-  candidateName
+  candidateName,
 ) => {
   const walletAddress = getRecoil(walletAddressState);
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
@@ -114,7 +115,7 @@ export const registerAndGetNFT = async (
   const result = await makeTransaction(
     walletAddress,
     registerABI,
-    contractAddress
+    contractAddress,
   );
   return result;
 };
@@ -128,7 +129,7 @@ export const getTotalCandidateNum = async (contractABI, contractAddress) => {
 export const getCandidateName = async (
   contractABI,
   contractAddress,
-  candidateId
+  candidateId,
 ) => {
   const walletAddress = getRecoil(walletAddressState);
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);
@@ -149,7 +150,7 @@ export const getAllCandidateNames = async (contractABI, contractAddress) => {
 export const getCandidateVoteCount = async (
   contractABI,
   contractAddress,
-  candidateId
+  candidateId,
 ) => {
   const walletAddress = getRecoil(walletAddressState);
   const ElectionContract = new web3.eth.Contract(contractABI, contractAddress);

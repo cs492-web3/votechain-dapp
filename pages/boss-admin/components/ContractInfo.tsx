@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { walletAddressState } from "../../atom";
 import TransactionDialog from "../../../components/TransactionDialog";
 import { useRouter } from "next/router";
-const ContractInfo = ({ data }) => {
+const ContractInfo = ({ data }: any) => {
   const [transactionResult, setTransactionResult] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 

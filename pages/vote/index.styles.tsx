@@ -1,6 +1,4 @@
-import styled from "@emotion/styled";
-import { css, Button, Typography, } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { styled, Button, Typography } from "@mui/material";
 
 export const Title = styled(Typography)(() => ({
   variant: "h2",
@@ -36,7 +34,10 @@ export const CandidateContainer = styled("div")(() => ({
   width: "70%",
 }));
 
-export const Candidate = styled("div")((props) => ({
+interface CandidateProps {
+  selected: boolean;
+}
+export const Candidate = styled("div")((props: CandidateProps) => ({
   width: "100%",
   color: "white",
   border: "1px solid ",
@@ -44,7 +45,9 @@ export const Candidate = styled("div")((props) => ({
   textAlign: "center",
   padding: 30,
   borderRadius: 30,
-  backgroundColor: props.selected ? "rgba(255, 255, 255, 0.2)" :"rgba(25, 118, 210, 0)",
+  backgroundColor: props.selected
+    ? "rgba(255, 255, 255, 0.2)"
+    : "rgba(25, 118, 210, 0)",
 }));
 
 export const VoteButton = styled(Button)(() => ({

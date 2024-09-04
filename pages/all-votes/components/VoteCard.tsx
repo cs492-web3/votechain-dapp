@@ -5,7 +5,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import votedPNG from "../../../public/voted.png";
 import CheckResultPNG from "../../../public/CheckResult.png";
 import Image from "next/image";
-const VoteStatusSteps = ({ data }) => {
+const VoteStatusSteps = ({ data }: any) => {
   return (
     <S.VoteStatusContainer>
       <S.VoteStatus disabled={data.status != "0"}>
@@ -19,13 +19,8 @@ const VoteStatusSteps = ({ data }) => {
   );
 };
 
-const VoteCard = ({ data }) => {
+const VoteCard = ({ data }: any) => {
   const router = useRouter();
-  useState(() => {
-    if (data.contractAddress == "0xeF1AA4215eFA8bA8161e6929a2022cef06484A2a") {
-      data.description = "Who Do You Want to see in KAIST Festival?";
-    }
-  }, []);
 
   const voteStatus = ["registerCandStarted", "voteStarted", "voteEnded"];
 

@@ -1,16 +1,17 @@
+//@ts-nocheck
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import contractABI from "./admin-abi.json";
 
 const alchemyKey = process.env.REACT_APP_ALCHEMY_KEY;
 
-const web3 = createAlchemyWeb3(alchemyKey);
+const web3 = createAlchemyWeb3(alchemyKey ?? "");
 
 // 전체 vote 관리자의 contract address
 const contractAddress = "0x12D1FC33d8aa9b1E4bb1F2e8e2E97EC7efb28F94";
 
 export const adminContract = new web3.eth.Contract(
   contractABI,
-  contractAddress
+  contractAddress,
 );
 
 export const getIsAdmin = async (walletAddress) => {
@@ -21,7 +22,7 @@ export const getIsAdmin = async (walletAddress) => {
 export const addContract = async (
   walletAddress,
   contractName,
-  contractAddress
+  contractAddress,
 ) => {
   const addABI = adminContract.methods
     .addContract(contractName, contractAddress)

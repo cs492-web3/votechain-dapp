@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import VoteCard from "./components/VoteCard";
 import * as S from "./index.styles";
@@ -19,7 +20,9 @@ const AllVotes = () => {
   useEffect(() => {
     async function allContracts() {
       var contractList = await getAllContracts();
-      contractList = contractList.filter((contract) => !contract.isDeleted);
+      contractList = contractList.filter(
+        (contract: any) => !contract.isDeleted,
+      );
       setAllContractList(contractList);
     }
     allContracts();

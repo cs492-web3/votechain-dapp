@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState, useEffect } from "react";
 import { ImageList, ImageListItem } from "@mui/material";
 import * as S from "./index.styles";
@@ -40,7 +41,8 @@ const NFTGallery = () => {
     <S.RootStyle>
       <S.Title>NFT GALLERY</S.Title>
       <S.BlueInfo>
-        You can Add NFT in your MetaMask with NFT Contract Address and TokenID 🤗
+        You can Add NFT in your MetaMask with NFT Contract Address and TokenID
+        🤗
       </S.BlueInfo>
       <ImageList sx={{ margin: 5 }}>
         {NFTInfoList.map((item, index) => {

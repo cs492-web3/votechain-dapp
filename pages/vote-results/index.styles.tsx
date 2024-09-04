@@ -1,17 +1,13 @@
-import styled from "@emotion/styled";
-import { css } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { styled } from "@mui/material";
 
-export const Title = styled("Typography")(() => ({
-  variant: "h1",
+export const Title = styled("div")(() => ({
   align: "center",
   color: "white",
   fontSize: 25,
   margin: 20,
 }));
 
-export const VoteTitle = styled("Typography")(() => ({
-  variant: "h1",
+export const VoteTitle = styled("div")(() => ({
   align: "center",
   color: "white",
   fontSize: 30,

@@ -1,4 +1,4 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+// @ts-nocheck
 import { useEffect, useState } from "react";
 import * as S from "./index.styles";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import TransactionDialog from "../../components/TransactionDialog";
 import CurrVoteInfo from "./components/CurrVoteInfo";
 
 export default function Admin() {
+  const router = useRouter();
   const [adminContractList, setAdminContractList] = useState([]);
   const [allContractList, setAllContractList] = useState([]);
   const address = useRecoilValue(walletAddressState);
@@ -19,7 +20,9 @@ export default function Admin() {
   useEffect(() => {
     async function allContracts() {
       var contractList = await getAllContracts();
-      contractList = contractList.filter((contract) => !contract.isDeleted);
+      contractList = contractList.filter(
+        (contract: any) => !contract.isDeleted,
+      );
       setAllContractList(contractList);
     }
     allContracts();

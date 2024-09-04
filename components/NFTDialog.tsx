@@ -1,5 +1,4 @@
-import { Button, colors } from "@mui/material";
-import styled from "@emotion/styled";
+import { styled, Button, colors } from "@mui/material";
 
 const InfoText = styled("div")(() => ({
   marginTop: 5,
@@ -8,32 +7,27 @@ const InfoText = styled("div")(() => ({
 const RewardText = styled("div")(() => ({
   marginTop: 15,
   marginBottom: 15,
-  fontSize: '18px',
-  color: '#0288d1'
+  fontSize: "18px",
+  color: "#0288d1",
 }));
 
 const CheckButton = styled(Button)(() => ({
   marginTop: 30,
-  fontSize: '15px',
-  color: '#0288d1',
-  border: '1px solid #0288d1'
+  fontSize: "15px",
+  color: "#0288d1",
+  border: "1px solid #0288d1",
 }));
 
-
-
-
-const NFTDialog = ({ NFTCA, tokenId }) => {
-
-    const url =
-      "https://pixxiti.com/ethereum/goerli/nfts/" + NFTCA + "/" + tokenId;
-
+const NFTDialog = ({ NFTCA, tokenId }: any) => {
+  const url =
+    "https://pixxiti.com/ethereum/goerli/nfts/" + NFTCA + "/" + tokenId;
 
   return (
-    <div style={{ marginTop: '10px'}}>
+    <div style={{ marginTop: "10px" }}>
       <RewardText>You got NFT as Reward! 🌇</RewardText>
       <InfoText>{`Your NFT contract Address is ${NFTCA} `}</InfoText>
       <InfoText>{`Your Token ID is ${tokenId}`}</InfoText>
-      <CheckButton onClick={() => window.open(url , "_blank")}>
+      <CheckButton onClick={() => window.open(url, "_blank")}>
         Check Your NFT
       </CheckButton>
     </div>

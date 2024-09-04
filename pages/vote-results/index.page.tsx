@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useEffect, useState } from "react";
 import * as S from "./index.styles";
 import ResultChart from "./components/ResultChart";
@@ -13,9 +14,9 @@ import {
 const VoteResults = () => {
   const router = useRouter();
   const [candidateList, setCandidateList] = useState([]);
-  const [totalCandidateNum, setTotalCandidateNum] = useState();
+  const [totalCandidateNum, setTotalCandidateNum] = useState<number>(0);
 
-  const [contractAddress, setContractAddress] = useState("");
+  const [contractAddress, setContractAddress] = useState<string>("");
   const [contractABI, setContractABI] = useState("");
   const [description, setDescription] = useState("");
 
@@ -39,7 +40,7 @@ const VoteResults = () => {
 
   useEffect(() => {
     async function getABI() {
-      const address = router.query["address"];
+      const address = router.query["address"]?.toString();
       if (address != undefined) {
         setContractAddress(address);
         const ABI = await fetchContractABI(address);

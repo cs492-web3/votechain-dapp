@@ -1,6 +1,7 @@
+//@ts-nocheck
 import React, { useState, useEffect } from "react";
 import * as S from "./index.styles";
-import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { walletAddressState } from "../atom";
 
 import {
@@ -14,34 +15,33 @@ import {
 } from "../api/voteAPI";
 import TransactionDialog from "../../components/TransactionDialog";
 import { useRouter } from "next/router";
-import NFTDialog from "../../components/NFTDialog";
 
 const Vote = () => {
   const router = useRouter();
-  const [transactionResult, setTransactionResult] = useState({});
-  const [modalOpen, setModalOpen] = useState(false);
+  const [transactionResult, setTransactionResult] = useState<any>();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const [contractAddress, setContractAddress] = useState("");
-  const [contractABI, setContractABI] = useState("");
+  const [contractAddress, setContractAddress] = useState<string>("");
+  const [contractABI, setContractABI] = useState<string>("");
   const walletAddress = useRecoilValue(walletAddressState);
-  const [tokenId, setTokenId] = useState("");
-  const [NFTCA, setNFTCA] = useState("");
+  const [tokenId, setTokenId] = useState<string>("");
+  const [NFTCA, setNFTCA] = useState<string>("");
   const [totalCandidateNum, setTotalCandidateNum] = useState(0);
   const [candidateList, setCandidateList] = useState([]);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
 
-  const [description, setDescription] = useState("");
-  const [isShowResultImm, setIsShowResultImm] = useState(false);
+  const [description, setDescription] = useState<string>("");
+  const [isShowResultImm, setIsShowResultImm] = useState<boolean>(false);
 
   // contract address를 바탕으로 ABI 가져오기
   useEffect(() => {
-    const address = router.query["address"];
+    const address = router.query["address"]?.toString() ?? "";
     const baseurl = "https://api-goerli.etherscan.io/api";
     const params = {
       module: "contract",
       action: "getabi",
       address: address,
-      apikey: process.env.ETHERSCAN_API_KEY,
+      apikey: process.env.ETHERSCAN_API_KEY ?? "",
     };
 
     const queryString = new URLSearchParams(params).toString(); // url에 쓰기 적합한 querySting으로 return 해준다.
@@ -119,7 +119,7 @@ const Vote = () => {
     } else {
       if (Number(e.target.id) in selectedCandidates) {
         setSelectedCandidates((prev) =>
-          prev.filter((i) => i != Number(e.target.id))
+          prev.filter((i) => i != Number(e.target.id)),
         );
       } else {
         setSelectedCandidates((prev) => [...prev, Number(e.target.id)]);
@@ -136,7 +136,7 @@ const Vote = () => {
       const result = await voteAndGetNFT(
         ABI,
         contractAddress,
-        selectedCandidates
+        selectedCandidates,
       );
       setTransactionResult(result);
     }
@@ -163,7 +163,7 @@ const Vote = () => {
 
   return (
     <S.RootStyle>
-      <S.Title>Let's Vote and Get NFT! 🌌</S.Title>
+      <S.Title>Let{"'"}s Vote and Get NFT! 🌌</S.Title>
       <S.Description>{description}</S.Description>
       <S.CandidateContainer>
         {candidateList.map((name, index) => {
@@ -171,7 +171,7 @@ const Vote = () => {
             <S.Candidate
               selected={selectedCandidates.includes(index)}
               key={index}
-              id={index}
+              id={index + ""}
               onClick={handleClick}
             >
               {name}
@@ -180,14 +180,14 @@ const Vote = () => {
         })}
       </S.CandidateContainer>
       <S.VoteButton onClick={voteHandler}>투표하기</S.VoteButton>
-      <TransactionDialog
-        open={modalOpen}
-        result={transactionResult}
-        handleClose={handleModalClose}
-        onClickClose={onClickClose}
-        NFTCA={NFTCA}
-        tokenId={tokenId}
-      />
+      {/*<TransactionDialog*/}
+      {/*  open={modalOpen}*/}
+      {/*  result={transactionResult}*/}
+      {/*  handleClose={handleModalClose}*/}
+      {/*  onClickClose={onClickClose}*/}
+      {/*  NFTCA={NFTCA}*/}
+      {/*  tokenId={tokenId}*/}
+      {/*/>*/}
     </S.RootStyle>
   );
 };

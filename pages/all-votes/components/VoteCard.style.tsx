@@ -36,12 +36,16 @@ export const Description = styled(Typography)`
   text-transform: none;
 `;
 
-export const VoteStatus = styled("div")((props) => ({
+interface VoteStatusProps {
+  disabled: boolean;
+}
+
+export const VoteStatus = styled("div")((props: VoteStatusProps) => ({
   borderWidth: 1,
   borderRadius: 20,
   borderColor: props.disabled ? "grey" : "#1976d2",
   color: props.disabled ? "grey" : "#1976d2",
-  fontSize : '18px'
+  fontSize: "18px",
 }));
 
 export const VoteStatusWrapper = styled("div")`

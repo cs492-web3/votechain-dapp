@@ -38,7 +38,7 @@ const AddContract = () => {
           label="Contract Name"
           variant="outlined"
           value={contractName}
-          onChange={(event) => {
+          onChange={(event: any) => {
             setContractName(event.target.value);
           }}
           InputLabelProps={{
@@ -54,7 +54,7 @@ const AddContract = () => {
           InputLabelProps={{
             style: { color: "grey" },
           }}
-          onChange={(event) => {
+          onChange={(event: any) => {
             setContractAddress(event.target.value.trim());
           }}
           inputProps={{ style: { color: "white" } }}

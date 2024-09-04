@@ -1,4 +1,4 @@
-import { css, styled, Typography, Button, Paper } from "@mui/material";
+import { styled, Typography, Button, Paper } from "@mui/material";
 
 export const Title = styled("div")`
   variant: h1;
@@ -21,7 +21,10 @@ export const BlackInfo = styled(Typography)`
   font-size: 15px;
 `;
 
-export const VoteStatus = styled("div")((props) => ({
+interface VoteStatusProps {
+  disabled: boolean;
+}
+export const VoteStatus = styled("div")((props: VoteStatusProps) => ({
   borderWidth: 1,
   borderRadius: 20,
   borderColor: props.disabled ? "grey" : "#1976d2",

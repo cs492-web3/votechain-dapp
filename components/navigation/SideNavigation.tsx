@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   Box,
   Drawer,
-  DrawerHeader,
   Divider,
   List,
   ListItem,
@@ -10,7 +9,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 
-const SideNavigation = ({ open, onClose }) => {
+const SideNavigation = ({ open, onClose }: any) => {
   const router = useRouter();
   return (
     <Drawer
@@ -20,7 +19,7 @@ const SideNavigation = ({ open, onClose }) => {
         sx: {
           backgroundColor: "rgba(0,0,0,0.8)",
           color: "#e3f2fd",
-          border:'1px solid rgba(255,255,255,0.3)'
+          border: "1px solid rgba(255,255,255,0.3)",
         },
       }}
     >

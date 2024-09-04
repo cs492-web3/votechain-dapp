@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -68,7 +69,6 @@ const ResultChart = ({ voteData, voteLabels }) => {
   return (
     <div
       style={{
-        margin: "50px",
         height: "60vh",
         width: "80%",
         alignItems: "center",

@@ -16,12 +16,12 @@ import {
 import TransactionDialog from "../../../components/TransactionDialog";
 import { useRouter } from "next/router";
 
-const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
+const CurrVoteInfo = ({ contractAddress, name, ABI }: any) => {
   const router = useRouter();
-  const [currVoteStatus, setCurrVoteStatus] = useState(null);
+  const [currVoteStatus, setCurrVoteStatus] = useState(0);
   const [candidateList, setCandidateList] = useState([]);
-  const [totalCandidateNum, setTotalCandidateNum] = useState();
-  const [totalVoteNum, setTotalVoteNum] = useState();
+  const [totalCandidateNum, setTotalCandidateNum] = useState(0);
+  const [totalVoteNum, setTotalVoteNum] = useState(0);
   const [voteDescription, setVoteDescription] = useState("");
 
   const [transactionResult, setTransactionResult] = useState({});
@@ -73,12 +73,13 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
   }, []);
 
   useEffect(() => {
-    async function getCandidateInfo(id) {
+    async function getCandidateInfo(id: any) {
       const name = await getCandidateName(ABI, contractAddress, id);
       var voteCount = "-";
       if (currVoteStatus == 2) {
         voteCount = await getCandidateVoteCount(ABI, contractAddress, id);
       }
+      // @ts-ignores
       setCandidateList((prev) => [
         ...prev,
         { name: name, voteCount: voteCount },
@@ -130,7 +131,7 @@ const CurrVoteInfo = ({ contractAddress, name, ABI }) => {
       <S.WhiteInfo>현재 등록된 후보자 수: {totalCandidateNum}</S.WhiteInfo>
       <S.WhiteInfo>현재까지 총 투표 수: {totalVoteNum}</S.WhiteInfo>
       <S.WhiteInfo>현재 등록된 후보자 정보</S.WhiteInfo>
-      {candidateList.map((info, index) => {
+      {candidateList.map((info: any, index) => {
         return (
           <S.CandidateInfo key={index}>
             <S.BlackInfo>후보자 이름 : {info.name}</S.BlackInfo>

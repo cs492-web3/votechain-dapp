@@ -13,7 +13,7 @@ export default function TransactionDialog({
   onClickClose,
   NFTCA,
   tokenId,
-}) {
+}: any) {
   return (
     <div>
       <Dialog
