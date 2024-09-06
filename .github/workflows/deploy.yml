@@ -51,7 +51,7 @@ jobs:
           NODE_ENV: production
 
       - name: login to github
-        run:
+        run: |
           git config --global user.email "seajh1114@gmail.com"
           git config --global user.name "seajung"
 
