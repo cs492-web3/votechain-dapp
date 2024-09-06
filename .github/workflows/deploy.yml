@@ -50,6 +50,11 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: login to github
+        run:
+          git config --global user.email "seajh1114@gmail.com"
+          git config --global user.name "seajung"
+
       - name: Deploy
         run: yarn run deploy
         working-directory: ${{ env.working-directory }}
