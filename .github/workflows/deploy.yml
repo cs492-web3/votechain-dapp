@@ -25,9 +25,9 @@ jobs:
         env:
           ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
           ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          NEXT_PUBLIC_DEFAULT_CHAIN: ${{ secrets.ETHERSCAN_API_KEY }}
-          REACT_APP_ALCHEMY_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
-          REACT_APP_PROJECT_ID: ${{ secrets.ETHERSCAN_API_KEY }}
+          NEXT_PUBLIC_DEFAULT_CHAIN: ${{ secrets.NEXT_PUBLIC_DEFAULT_CHAIN }}
+          REACT_APP_ALCHEMY_KEY: ${{ secrets.REACT_APP_ALCHEMY_KEY }}
+          REACT_APP_PROJECT_ID: ${{ secrets.REACT_APP_PROJECT_ID }}
 
       # 캐싱 설정
       - name: Cache node_modules
